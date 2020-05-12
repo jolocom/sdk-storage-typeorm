@@ -1,0 +1,29 @@
+{
+  "name": "jolocom-sdk-storage-typeorm",
+  "version": "1.0.0",
+  "main": "js/index.js",
+  "files": [
+    "js/"
+  ],
+  "scripts": {
+    "build": "tsc -p .",
+    "start": "tsc -p . -w"
+  },
+  "repository": "git@github.com:jolocom/sdk-storage-typeorm",
+  "author": "Jolocom Dev <dev@jolocom.io>",
+  "license": "MIT",
+  "peerDependencies": {
+    "jolocom-lib": "^4.1.0",
+    "jolocom-sdk": "^0.6.0",
+    "typeorm": "^0.2.24"
+  },
+  "dependencies": {
+    "class-transformer": "^0.2.3",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "jolocom-lib": "^4.1.0",
+    "jolocom-sdk": "^0.6.0",
+    "typeorm": "^0.2.24"
+  }
+}
