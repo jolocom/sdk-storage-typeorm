@@ -1,16 +1,18 @@
 {
-  "name": "jolocom-sdk-storage-typeorm",
+  "name": "@jolocom/sdk-storage-typeorm",
   "version": "1.0.0",
+  "description": "Jolocom SDK storage module backed by Typeorm",
   "main": "js/index.js",
   "files": [
     "js/"
   ],
   "scripts": {
     "build": "tsc -p .",
-    "start": "tsc -p . -w"
+    "start": "tsc -p . -w",
+    "prepare": "yarn build"
   },
   "repository": "git@github.com:jolocom/sdk-storage-typeorm",
-  "author": "Jolocom Dev <dev@jolocom.io>",
+  "author": "Jolocom Dev <dev@jolocom.com>",
   "license": "MIT",
   "peerDependencies": {
     "jolocom-lib": "^4.1.0",
