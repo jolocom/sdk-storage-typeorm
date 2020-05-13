@@ -25,5 +25,11 @@
     "jolocom-sdk": "^0.6.0",
     "typeorm": "^0.2.24",
     "typescript": "^3.8.3"
-  }
+  },
+  "keywords": [
+    "Jolocom",
+    "Self-Sovereign Identity",
+    "jolocom-sdk",
+    "typeorm"
+  ]
 }

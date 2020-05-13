@@ -13,23 +13,23 @@ In your `ormconfig.ts` you need to add the jolocom-sdk entities to your
 ```ts
 export default {
   type: 'sqlite',
-  database: 'typeorm_agent/db.sqlite3',
+  database: './db.sqlite3',
   logging: ['error', 'warn', 'schema'],
   entities: [ 'node_modules/@jolocom/sdk-storage-typeorm/js/src/entities/*.js' ],
   /** or if you list entity classes, then simply add the SDK entities
   entities: [
     // your entities here
     // then
-    ...require('jolocom-sdk-storage-typeorm').entityList
+    ...require('@jolocom/sdk-storage-typeorm').entityList
   ],
   */
 
   // migrations are recommended!
-  migrations: ['typeorm_agent/migrations/*.js'],
+  migrations: ['./migrations/*.js'],
   migrationsRun: true,
   synchronize: false,
   cli: {
-    migrationsDir: 'typeorm_agent/migrations',
+    migrationsDir: './migrations',
   },
 }
 ```
@@ -37,7 +37,7 @@ export default {
 In your application, instantiate the storage module with a typeorm connection,
 then pass it to the JolocomSDK constrcutor. Example:
 
-```
+```ts
 const typeorm = require('typeorm')
 const { JolocomTypeormStorage } = require('@jolocom/sdk-storage-typeorm')
 const { JolocomSDK } = require('jolocom-sdk')
