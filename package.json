@@ -20,12 +20,12 @@
     "typeorm": "^0.2.24"
   },
   "dependencies": {
-    "class-transformer": "^0.2.3",
-    "typescript": "^3.8.3"
+    "class-transformer": "^0.2.3"
   },
   "devDependencies": {
     "jolocom-lib": "^4.1.0",
     "jolocom-sdk": "^0.6.0",
-    "typeorm": "^0.2.24"
+    "typeorm": "^0.2.24",
+    "typescript": "^3.8.3"
   }
 }
