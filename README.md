@@ -25,7 +25,7 @@ export default {
   */
 
   // migrations are recommended!
-  migrations: ['./migrations/*.js'],
+  migrations: ['./migrations/*.ts'],
   migrationsRun: true,
   synchronize: false,
   cli: {
@@ -34,9 +34,19 @@ export default {
 }
 ```
 
-In your application, instantiate the storage module with a typeorm connection,
-then pass it to the JolocomSDK constrcutor. Example:
+Then you need to generate migrations, for example using
+```
+yarn run typeorm migration:generate -n JolocomSDK
+```
+If you have `{ migrationsRun: true }` in your `ormconfig.ts` as in the above
+example, then the migration will automatically be run when you start the app
+next. Otherwise you have to run it manually
 
+
+Next, in your application, instantiate the storage module with a typeorm
+connection, then pass it to the JolocomSDK constrcutor
+
+Full app example:
 ```ts
 const typeorm = require('typeorm')
 const { JolocomTypeormStorage } = require('@jolocom/sdk-storage-typeorm')
