@@ -2,6 +2,30 @@
 # yarn lockfile v1
 
 
+"@jolocom/sdk@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.7.0.tgz#ab0056f01372baf2ffa354a19433a85302df0514"
+  integrity sha512-FRk6uiPXT00ppGL7ORsCdxVn/pAFWfnc+mUx5y8b92q0jakPiMaykTZdN2H/zajqPxuniI2UZiQ3rEPpA4JABQ==
+  dependencies:
+    assert "^2.0.0"
+    bip39 "^3.0.2"
+    browser-ipfs "^0.0.6"
+    cred-types-jolocom-core "^0.0.11"
+    crypto-browserify "^3.12.0"
+    ethereumjs-wallet "^0.6.0"
+    events "^3.0.0"
+    form-data "^3.0.0"
+    i18n-js "^3.1.0"
+    jolocom-lib "^4.1.0"
+    ramda "^0.26.1"
+    sjcl "^1.0.7"
+    sqlite3 "^4.0.0"
+    squel "^5.12.1"
+    stream-browserify "^2.0.2"
+    unorm "^1.6.0"
+    vm-browserify "^1.1.0"
+    wif "^2.0.6"
+
 "@types/bn.js@^4.11.3":
   version "4.11.6"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.6.tgz#c306c70d9358aaea33cd4eda092a742b9505967c"
@@ -2179,42 +2203,10 @@ jolocom-registry-contract@^0.1.7:
     typescript "^2.6.2"
     web3 "1.0.0-beta.29"
 
-jolocom-sdk@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/jolocom-sdk/-/jolocom-sdk-0.6.0.tgz#437f5ba77e5a97ed59180bbde41c2855e3ea1431"
-  integrity sha512-vG48qwxKWaPt5Xwj2qVayz6+DMjj6oIbh6dmYerj9ywtvuohsrlLmqv9GCc1rXD7+rKTb/6qKyvo1Cj2cIUFQA==
-  dependencies:
-    assert "^2.0.0"
-    bip39 "^3.0.2"
-    browser-ipfs "^0.0.6"
-    cred-types-jolocom-core "^0.0.11"
-    crypto-browserify "^3.12.0"
-    ethereumjs-wallet "^0.6.0"
-    events "^3.0.0"
-    form-data "^3.0.0"
-    i18n-js "^3.1.0"
-    jolocom-lib "^4.1.0"
-    ramda "^0.26.1"
-    redux "^3.7.2"
-    redux-thunk "^2.3.0"
-    sjcl "^1.0.7"
-    sqlite3 "^4.0.0"
-    squel "^5.12.1"
-    stream-browserify "^2.0.2"
-    typeorm "^0.2.5"
-    unorm "^1.6.0"
-    vm-browserify "^1.1.0"
-    wif "^2.0.6"
-
 js-sha3@0.5.7:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/js-sha3/-/js-sha3-0.5.7.tgz#0d4ffd8002d5333aabaf4a23eed2f6374c9f28e7"
   integrity sha1-DU/9gALVMzqrr0oj7tL2N0yfKOc=
-
-"js-tokens@^3.0.0 || ^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
-  integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
 js-yaml@^3.13.1:
   version "3.13.1"
@@ -2407,27 +2399,15 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash-es@^4.2.1:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
-  integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
-
 lodash.assign@^4.0.3, lodash.assign@^4.0.6:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.assign/-/lodash.assign-4.2.0.tgz#0d99f3ccd7a6d261d19bdaeb9245005d285808e7"
   integrity sha1-DZnzzNem0mHRm9rrkkUAXShYCOc=
 
-lodash@^4.17.14, lodash@^4.2.1:
+lodash@^4.17.14:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
-
-loose-envify@^1.1.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
-  integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
-  dependencies:
-    js-tokens "^3.0.0 || ^4.0.0"
 
 lowercase-keys@^1.0.0:
   version "1.0.1"
@@ -3234,21 +3214,6 @@ readable-stream@~1.0.15:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-redux-thunk@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
-  integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
-
-redux@^3.7.2:
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/redux/-/redux-3.7.2.tgz#06b73123215901d25d065be342eb026bc1c8537b"
-  integrity sha512-pNqnf9q1hI5HHZRBkj3bAngGZW/JMCmexDlOxw4XagXY2o1327nHH54LoTjiPJ0gizoqPDRqWyX/00g0hD6w+A==
-  dependencies:
-    lodash "^4.2.1"
-    lodash-es "^4.2.1"
-    loose-envify "^1.1.0"
-    symbol-observable "^1.0.3"
-
 reflect-metadata@^0.1.13:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
@@ -3864,11 +3829,6 @@ swarm-js@0.1.37:
     tar.gz "^1.0.5"
     xhr-request-promise "^0.1.2"
 
-symbol-observable@^1.0.3:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
-  integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
-
 tape@^4.4.0:
   version "4.13.2"
   resolved "https://registry.yarnpkg.com/tape/-/tape-4.13.2.tgz#eb419b9d9bc004025b1a81a5b63093e07f425629"
@@ -4067,7 +4027,7 @@ typeforce@^1.11.5:
   resolved "https://registry.yarnpkg.com/typeforce/-/typeforce-1.18.0.tgz#d7416a2c5845e085034d70fcc5b6cc4a90edbfdc"
   integrity sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g==
 
-typeorm@^0.2.24, typeorm@^0.2.5:
+typeorm@^0.2.24:
   version "0.2.24"
   resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.24.tgz#cd0fbd907326873a96c98e290fca49c589f0ffa8"
   integrity sha512-L9tQv6nNLRyh+gex/qc8/CyLs8u0kXKqk1OjYGF13k/KOg6N2oibwkuGgv0FuoTGYx2ta2NmqvuMUAMrHIY5ew==

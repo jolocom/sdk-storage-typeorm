@@ -7,7 +7,7 @@ import { VerifiableCredentialEntity } from './entities/verifiableCredentialEntit
 import { CacheEntity } from './entities/cacheEntity'
 import { InteractionTokenEntity } from './entities/interactionTokenEntity'
 
-import { IStorage } from 'jolocom-sdk/js/src/lib/storage'
+import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
 import { Connection } from 'typeorm'
 import { plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -15,9 +15,9 @@ import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { IdentitySummary } from 'jolocom-sdk/js/src/lib/types'
+import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
-import { groupAttributesByCredentialId } from 'jolocom-sdk/js/src/lib/storage/utils'
+import { groupAttributesByCredentialId } from '@jolocom/sdk/js/src/lib/storage/utils'
 
 import {
   JWTEncodable,
