@@ -19,7 +19,7 @@
     "typeorm": "^0.2.24"
   },
   "dependencies": {
-    "class-transformer": "^0.2.3"
+    "class-transformer": "^0.3.1"
   },
   "devDependencies": {
     "@jolocom/sdk": "^0.7.0",
