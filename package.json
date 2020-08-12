@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@jolocom/sdk": "^0.7.0",
+    "local-did-resolver": "^0.2.2",
     "typeorm": "^0.2.24",
     "typescript": "^3.8.3"
   },

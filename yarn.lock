@@ -2384,6 +2384,11 @@ load-json-file@^1.0.0:
     pinkie-promise "^2.0.0"
     strip-bom "^2.0.0"
 
+local-did-resolver@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/local-did-resolver/-/local-did-resolver-0.2.2.tgz#2d496003fce724be9b636281637247e5fa48ea18"
+  integrity sha512-nxj9bavs6kHnk/aKYk8IS+CrQItWcGqlqXpeyDHIWcdayqoF4F7nkqysGXAU7M9zazC9olIpDsgoGvWQyj5fRA==
+
 locate-path@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-3.0.0.tgz#dbec3b3ab759758071b58fe59fc41871af21400e"

@@ -6,6 +6,7 @@ import { SignatureEntity } from './entities/signatureEntity'
 import { VerifiableCredentialEntity } from './entities/verifiableCredentialEntity'
 import { CacheEntity } from './entities/cacheEntity'
 import { InteractionTokenEntity } from './entities/interactionTokenEntity'
+import { EventLogEntity } from './entities/eventLogEntity'
 
 import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
 import { Connection } from 'typeorm'
@@ -18,6 +19,7 @@ import {
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
 import { groupAttributesByCredentialId } from '@jolocom/sdk/js/src/lib/storage/utils'
+import { InternalDb } from 'local-did-resolver'
 
 import {
   JWTEncodable,
@@ -290,6 +292,38 @@ export class JolocomTypeormStorage implements IStorage {
       .from(VerifiableCredentialEntity)
       .where('id = :id', { id })
       .execute()
+  }
+
+  private async readEventLog(id: string): Promise<string[]> {
+    return await this.connection.manager.findOne(EventLogEntity, id).then(el => {
+      if (!el) throw new Error("no Event Log found for id: " + id)
+      return el.events
+    })
+  }
+  
+  private async appendEvent(id: string, events: string[]): Promise<boolean> {
+    return await this.connection.manager.findOne(EventLogEntity, id).then(async (el) => {
+      if (!el) return false
+      el.events.push(...events)
+      await this.connection.manager.save(el)
+      return true
+    })
+  }
+
+  private async deleteEventLog(id: string): Promise<boolean> {
+    await this.connection.manager
+      .createQueryBuilder()
+      .delete()
+      .from(EventLogEntity)
+      .where('id = :id', { id })
+      .execute()
+    return true
+  }
+
+  public eventDB: InternalDb = {
+    read: this.readEventLog.bind(this),
+    append: this.appendEvent.bind(this),
+    delete: this.deleteEventLog.bind(this)
   }
 }
 
