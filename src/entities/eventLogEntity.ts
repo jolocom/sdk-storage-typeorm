@@ -5,6 +5,6 @@ export class EventLogEntity {
   @PrimaryColumn({ length: 100 })
   id!: string
 
-  @Column()
-  events!: string[]
+  @Column("text")
+  eventStream!: string
 }

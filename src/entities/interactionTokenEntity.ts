@@ -2,7 +2,6 @@ import { plainToClass } from 'class-transformer'
 
 import { PrimaryGeneratedColumn, Entity, Column } from 'typeorm'
 import {
-  JWTEncodable,
   JSONWebToken,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 
@@ -23,10 +22,10 @@ export class InteractionTokenEntity {
   @Column()
   timestamp!: number
 
-  @Column()
+  @Column("text")
   original!: string
 
-  static fromJWT(jwt: JSONWebToken<JWTEncodable>): InteractionTokenEntity {
+  static fromJWT(jwt: JSONWebToken<any>): InteractionTokenEntity {
     return plainToClass(InteractionTokenEntity, {
       nonce: jwt.nonce,
       type: jwt.interactionType,

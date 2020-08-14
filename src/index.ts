@@ -1,7 +1,6 @@
 import { SettingEntity } from './entities/settingEntity'
 import { CredentialEntity } from './entities/credentialEntity'
 import { MasterKeyEntity } from './entities/masterKeyEntity'
-import { PersonaEntity } from './entities/personaEntity'
 import { SignatureEntity } from './entities/signatureEntity'
 import { VerifiableCredentialEntity } from './entities/verifiableCredentialEntity'
 import { CacheEntity } from './entities/cacheEntity'
@@ -9,7 +8,7 @@ import { InteractionTokenEntity } from './entities/interactionTokenEntity'
 import { EventLogEntity } from './entities/eventLogEntity'
 import { EncryptedWalletEntity } from './entities/encryptedWalletEntity'
 
-import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
+import { IStorage, EncryptedWalletAttributes, EncryptedSeedAttributes } from '@jolocom/sdk/js/src/lib/storage'
 import { Connection } from 'typeorm'
 import { plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -19,7 +18,7 @@ import {
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
-import { groupAttributesByCredentialId } from '@jolocom/sdk/js/src/lib/storage/utils'
+import { groupAttributesByCredentialId } from './utils'
 import { InternalDb } from 'local-did-resolver'
 
 import {
@@ -31,17 +30,6 @@ import { JolocomLib } from 'jolocom-lib'
 export interface PersonaAttributes {
   did: string
   controllingKeyPath: string
-}
-
-export interface EncryptedSeedAttributes {
-  encryptedEntropy: string
-  timestamp: number
-}
-
-export interface EncryptedWalletAttributes {
-  id: string
-  encryptedWallet: string
-  timestamp: number
 }
 
 /**
@@ -56,7 +44,6 @@ export class JolocomTypeormStorage implements IStorage {
 
   public store = {
     setting: this.saveSetting.bind(this),
-    persona: this.storePersonaFromJSON.bind(this),
     verifiableCredential: this.storeVClaim.bind(this),
     encryptedSeed: this.storeEncryptedSeed.bind(this),
     encryptedWallet: this.storeEncryptedWallet.bind(this),
@@ -69,7 +56,6 @@ export class JolocomTypeormStorage implements IStorage {
   public get = {
     settingsObject: this.getSettingsObject.bind(this),
     setting: this.getSetting.bind(this),
-    persona: this.getPersonas.bind(this),
     verifiableCredential: this.getVCredential.bind(this),
     attributesByType: this.getAttributesByType.bind(this),
     vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
@@ -110,11 +96,6 @@ export class JolocomTypeormStorage implements IStorage {
     const repo = this.connection.getRepository(SettingEntity)
     const setting = repo.create({ key, value })
     await repo.save(setting)
-  }
-
-  // TODO: refactor needed on multiple personas
-  private async getPersonas(query?: object): Promise<PersonaEntity[]> {
-    return this.connection.manager.find(PersonaEntity)
   }
 
   private async getVCredential(query?: object): Promise<SignedCredential[]> {
@@ -224,11 +205,6 @@ export class JolocomTypeormStorage implements IStorage {
     return DidDocument.fromJSON(entry.value)
   }
 
-  private async storePersonaFromJSON(args: PersonaAttributes): Promise<void> {
-    const persona = plainToClass(PersonaEntity, args)
-    await this.connection.manager.save(persona)
-  }
-
   private async storeEncryptedWallet(
     args: EncryptedWalletAttributes,
   ): Promise<void> {
@@ -326,14 +302,14 @@ export class JolocomTypeormStorage implements IStorage {
   private async readEventLog(id: string): Promise<string[]> {
     return await this.connection.manager.findOne(EventLogEntity, id).then(el => {
       if (!el) throw new Error("no Event Log found for id: " + id)
-      return el.events
+      return JSON.parse(el.eventStream)
     })
   }
   
   private async appendEvent(id: string, events: string[]): Promise<boolean> {
     return await this.connection.manager.findOne(EventLogEntity, id).then(async (el) => {
       if (!el) return false
-      el.events.push(...events)
+      el.eventStream = JSON.stringify([...JSON.parse(el.eventStream),...events])
       await this.connection.manager.save(el)
       return true
     })

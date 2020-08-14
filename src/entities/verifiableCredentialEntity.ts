@@ -10,7 +10,7 @@ import { Exclude, Expose, plainToClass, classToPlain } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import { ISignedCredentialAttrs } from 'jolocom-lib/js/credentials/signedCredential/types'
 import { IClaimSection } from 'jolocom-lib/js/credentials/credential/types'
-import { PersonaEntity } from './personaEntity'
+import { EncryptedWalletEntity } from './encryptedWalletEntity'
 import { SignatureEntity } from './signatureEntity'
 import { CredentialEntity } from './credentialEntity'
 
@@ -48,8 +48,8 @@ export class VerifiableCredentialEntity {
   expires!: Date
 
   @Expose()
-  @ManyToOne(type => PersonaEntity, persona => persona.did)
-  subject!: PersonaEntity
+  @ManyToOne(type => EncryptedWalletEntity, wallet => wallet.id)
+  subject!: EncryptedWalletEntity
 
   @OneToMany(type => SignatureEntity, sig => sig.verifiableCredential, {
     cascade: true,
@@ -86,7 +86,7 @@ export class VerifiableCredentialEntity {
     const json = classToPlain(this) as any
     const entityData = {
       ...json,
-      claim: convertClaimArrayToObject(this.claim, this.subject.did),
+      claim: convertClaimArrayToObject(this.claim, this.subject.id),
       proof: this.proof[0],
     }
 
