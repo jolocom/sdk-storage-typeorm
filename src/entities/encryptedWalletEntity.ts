@@ -1,6 +1,6 @@
 import { PrimaryColumn, Entity, Column } from 'typeorm'
 
-@Entity('master_keys')
+@Entity('encrypted_wallet')
 export class EncryptedWalletEntity {
   @PrimaryColumn({ length: 100 })
   id!: string

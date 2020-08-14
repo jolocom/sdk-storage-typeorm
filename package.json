@@ -16,16 +16,17 @@
   "license": "MIT",
   "peerDependencies": {
     "typeorm": "^0.2.24",
+    "jolocom-lib": "^4.3.5",
     "@jolocom/sdk": "^0.12.0"
   },
   "dependencies": {
     "class-transformer": "^0.2.3",
-    "jolocom-lib": "^4.3.5",
     "ramda": "^0.27.1"
   },
   "devDependencies": {
     "typeorm": "^0.2.24",
     "@types/ramda": "^0.27.14",
+    "jolocom-lib": "^4.3.5",
     "@jolocom/sdk": "^0.12.0",
     "local-did-resolver": "^0.2.2",
     "typescript": "^3.8.3"
