@@ -1,6 +1,6 @@
 {
   "name": "@jolocom/sdk-storage-typeorm",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Jolocom SDK storage module backed by Typeorm",
   "main": "js/index.js",
   "files": [
