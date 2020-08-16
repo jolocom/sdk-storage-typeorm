@@ -147,14 +147,13 @@ export class JolocomTypeormStorage implements IStorage {
     return entities.map(e => e.toVerifiableCredential())
   }
 
-  private async getEncryptedWallet(): Promise<EncryptedWalletAttributes | null> {
-    const walletEntities = await this.connection.manager.find(EncryptedWalletEntity)
-    if (walletEntities.length) {
-      const w = walletEntities[0]
+  private async getEncryptedWallet(id: string): Promise<EncryptedWalletAttributes | null> {
+    const walletEntity = await this.connection.manager.findOne(EncryptedWalletEntity, { id })
+    if (walletEntity) {
       return {
-        id: w.id,
-        encryptedWallet: w.encryptedWallet,
-        timestamp: w.timestamp
+        id: walletEntity.id,
+        encryptedWallet: walletEntity.encryptedWallet,
+        timestamp: walletEntity.timestamp
       }
     }
     return null

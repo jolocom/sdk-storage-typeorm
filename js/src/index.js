@@ -119,15 +119,14 @@ class JolocomTypeormStorage {
             return entities.map(e => e.toVerifiableCredential());
         });
     }
-    getEncryptedWallet() {
+    getEncryptedWallet(id) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const walletEntities = yield this.connection.manager.find(encryptedWalletEntity_1.EncryptedWalletEntity);
-            if (walletEntities.length) {
-                const w = walletEntities[0];
+            const walletEntity = yield this.connection.manager.findOne(encryptedWalletEntity_1.EncryptedWalletEntity, { id });
+            if (walletEntity) {
                 return {
-                    id: w.id,
-                    encryptedWallet: w.encryptedWallet,
-                    timestamp: w.timestamp
+                    id: walletEntity.id,
+                    encryptedWallet: walletEntity.encryptedWallet,
+                    timestamp: walletEntity.timestamp
                 };
             }
             return null;
