@@ -9,10 +9,10 @@
   dependencies:
     cred-types-jolocom-core "^0.0.11"
 
-"@jolocom/sdk@^0.12.0":
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.12.0.tgz#631ecdf3bac02d8b372856c0a3009fdc8b48a37e"
-  integrity sha512-8DFJDDhVnVipQ+w8eFNpKfA3Lg4p/tno73SSJbp3IfjC/VVIG3mIJZQbxehUJYSOsvJM2syqOUohOZSMD0n/Aw==
+"@jolocom/sdk@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-0.13.0.tgz#05d4217fbb6f2be595129364d77cbd7441bb6417"
+  integrity sha512-eQUhHomjMRQngk0RBE8Y8OyryZm+2UfBEP7hyWWAI2LmGqyhAk7DpsuU+dp3S7FTLmUbe3bFd1Qpt622jaHvow==
   dependencies:
     form-data "^3.0.0"
     ramda "^0.26.1"
