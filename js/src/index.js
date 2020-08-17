@@ -121,7 +121,9 @@ class JolocomTypeormStorage {
     }
     getEncryptedWallet(id) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const walletEntity = yield this.connection.manager.findOne(encryptedWalletEntity_1.EncryptedWalletEntity, { id });
+            const walletEntity = id
+                ? yield this.connection.manager.findOne(encryptedWalletEntity_1.EncryptedWalletEntity, { id })
+                : (yield this.connection.manager.find(encryptedWalletEntity_1.EncryptedWalletEntity))[0];
             if (walletEntity) {
                 return {
                     id: walletEntity.id,

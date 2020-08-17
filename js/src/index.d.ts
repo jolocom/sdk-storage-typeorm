@@ -44,7 +44,7 @@ export declare class JolocomTypeormStorage implements IStorage {
         }>;
         vCredentialsByAttributeValue: (attribute: string) => Promise<SignedCredential[]>;
         encryptedSeed: () => Promise<string | null>;
-        encryptedWallet: (id: string) => Promise<EncryptedWalletAttributes | null>;
+        encryptedWallet: (id?: string | undefined) => Promise<EncryptedWalletAttributes | null>;
         credentialMetadata: ({ issuer, type: credentialType, }: SignedCredential) => Promise<any>;
         publicProfile: (did: string) => Promise<IdentitySummary>;
         didDoc: (did: string) => Promise<DidDocument>;
