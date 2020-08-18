@@ -58,11 +58,6 @@
   dependencies:
     ts-toolbelt "^6.3.3"
 
-acorn@7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.0.tgz#949d36f2c292535da602283586c2477c57eb2d6c"
-  integrity sha512-kL5CuoXA/dgxlBbVrflsflzQ3PAas7RYZB52NOm/6839iVYJgKMJ3cQJD+t2i5+qFa8h3MDpEOJiS64E8JLnSQ==
-
 aes-js@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/aes-js/-/aes-js-3.0.0.tgz#e21df10ad6c2053295bcbb8dab40b09dbea87e4d"
@@ -530,30 +525,6 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-eccrypto@rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88:
-  version "1.1.2"
-  resolved "https://codeload.github.com/rootstock/eccrypto/tar.gz/485e11f163093fb6e0d5263fa46ed5075dedfe88"
-  dependencies:
-    acorn "7.1.0"
-    elliptic "6.5.1"
-    es6-promise "4.2.8"
-    nan "2.14.0"
-  optionalDependencies:
-    secp256k1 "3.7.1"
-
-elliptic@6.5.1:
-  version "6.5.1"
-  resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.1.tgz#c380f5f909bf1b9b4428d028cd18d3b0efd6b52b"
-  integrity sha512-xvJINNLbTeWQjrl6X+7eQCrIy/YPv5XCpKW6kB5mKvtnGILoLDcySuwomfdzt0BMdLNVnuRNTuzKNHj0bva1Cg==
-  dependencies:
-    bn.js "^4.4.0"
-    brorand "^1.0.1"
-    hash.js "^1.0.0"
-    hmac-drbg "^1.0.0"
-    inherits "^2.0.1"
-    minimalistic-assert "^1.0.0"
-    minimalistic-crypto-utils "^1.0.0"
-
 elliptic@6.5.2, elliptic@^6.4.0, elliptic@^6.4.1, elliptic@^6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.2.tgz#05c5678d7173c049d8ca433552224a495d0e3762"
@@ -576,11 +547,6 @@ emoji-regex@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
-
-es6-promise@4.2.8:
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.8.tgz#4eb21594c972bc40553d276e510539143db53e0a"
-  integrity sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
 
 escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"
@@ -919,10 +885,10 @@ jolo-did-resolver@0.2.1:
     jolocom-registry-contract "0.3.0"
     node-fetch "^2.6.0"
 
-jolocom-lib@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.0.1.tgz#c0ee21496ee59e8bdb26003fdbd969507d65cafe"
-  integrity sha512-63i1fSudKcAqp4h88JHLuyhFcGTirSTqPVifvBSeP+RSWS/qYMQU9tKIKmSm1WCav5mJG5ndNbWt2meSb7NHQA==
+jolocom-lib@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/jolocom-lib/-/jolocom-lib-5.0.3.tgz#b1d3ba3127290a641cb55cd223ed9c67427b13d3"
+  integrity sha512-mOUOwkvoiRIEF6nI1qpQvp7RJvEg+cudYs8zayWxzdm8CIdOc/5/la+lTDLqjleyaUb42SQG/78rDXqxtSN31g==
   dependencies:
     "@jolocom/native-utils-node" "^0.5.6"
     "@jolocom/protocol-ts" "^0.5.1"
@@ -934,7 +900,6 @@ jolocom-lib@^5.0.1:
     create-hash "^1.2.0"
     detect-node "^2.0.4"
     did-resolver "2.0.0"
-    eccrypto rootstock/eccrypto#485e11f163093fb6e0d5263fa46ed5075dedfe88
     ethereumjs-tx "^1.3.7"
     ethereumjs-util "^6.1.0"
     ethers "^4.0.27"
@@ -950,7 +915,6 @@ jolocom-lib@^5.0.1:
     reflect-metadata "^0.1.13"
     secrets.js-grempe "^1.1.0"
     sinon-chai "^3.3.0"
-    tiny-secp256k1 "^1.0.1"
 
 jolocom-registry-contract@0.3.0, jolocom-registry-contract@^0.3.0:
   version "0.3.0"
@@ -1134,11 +1098,6 @@ mz@^2.4.0:
     any-promise "^1.0.0"
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
-
-nan@2.14.0:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
-  integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
 
 nan@^2.13.2, nan@^2.14.0, nan@^2.2.1:
   version "2.14.1"
@@ -1394,20 +1353,6 @@ scrypt-js@2.0.4:
   resolved "https://registry.yarnpkg.com/scrypt-js/-/scrypt-js-2.0.4.tgz#32f8c5149f0797672e551c07e230f834b6af5f16"
   integrity sha512-4KsaGcPnuhtCZQCxFxN3GVYIhKFPTdLd8PLC552XwbMndtD0cjRFAhDuuydXQ0h08ZfPgzqe6EKHozpuH74iDw==
 
-secp256k1@3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/secp256k1/-/secp256k1-3.7.1.tgz#12e473e0e9a7c2f2d4d4818e722ad0e14cc1e2f1"
-  integrity sha512-1cf8sbnRreXrQFdH6qsg2H71Xw91fCCS9Yp021GnUNJzWJS/py96fS4lHbnTnouLp08Xj6jBoBB6V78Tdbdu5g==
-  dependencies:
-    bindings "^1.5.0"
-    bip66 "^1.1.5"
-    bn.js "^4.11.8"
-    create-hash "^1.2.0"
-    drbg.js "^1.0.1"
-    elliptic "^6.4.1"
-    nan "^2.14.0"
-    safe-buffer "^5.1.2"
-
 secp256k1@^3.0.1:
   version "3.8.0"
   resolved "https://registry.yarnpkg.com/secp256k1/-/secp256k1-3.8.0.tgz#28f59f4b01dbee9575f56a47034b7d2e3b3b352d"
@@ -1566,7 +1511,7 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-tiny-secp256k1@^1.0.0, tiny-secp256k1@^1.0.1:
+tiny-secp256k1@^1.0.0:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/tiny-secp256k1/-/tiny-secp256k1-1.1.4.tgz#772a7711baaa9e2bffa92708cafadc9d372907a3"
   integrity sha512-O7NfGzBdBy/jamehZ1ptutZsh2c+9pq2Pu+KPv75+yzk5/Q/6lppQGMUJucHdRGdkeBcAUeLAOdJInEAZgZ53A==

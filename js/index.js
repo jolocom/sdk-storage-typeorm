@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const settingEntity_1 = require("./src/entities/settingEntity");
+exports.SettingEntity = settingEntity_1.SettingEntity;
 const credentialEntity_1 = require("./src/entities/credentialEntity");
 exports.CredentialEntity = credentialEntity_1.CredentialEntity;
-const masterKeyEntity_1 = require("./src/entities/masterKeyEntity");
-exports.MasterKeyEntity = masterKeyEntity_1.MasterKeyEntity;
+const encryptedWalletEntity_1 = require("./src/entities/encryptedWalletEntity");
+exports.EncryptedWalletEntity = encryptedWalletEntity_1.EncryptedWalletEntity;
 const signatureEntity_1 = require("./src/entities/signatureEntity");
 exports.SignatureEntity = signatureEntity_1.SignatureEntity;
 const verifiableCredentialEntity_1 = require("./src/entities/verifiableCredentialEntity");
@@ -16,7 +17,7 @@ exports.InteractionTokenEntity = interactionTokenEntity_1.InteractionTokenEntity
 exports.entityList = [
     settingEntity_1.SettingEntity,
     credentialEntity_1.CredentialEntity,
-    masterKeyEntity_1.MasterKeyEntity,
+    encryptedWalletEntity_1.EncryptedWalletEntity,
     signatureEntity_1.SignatureEntity,
     verifiableCredentialEntity_1.VerifiableCredentialEntity,
     cacheEntity_1.CacheEntity,

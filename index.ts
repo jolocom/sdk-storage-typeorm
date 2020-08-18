@@ -1,14 +1,15 @@
 import { SettingEntity } from './src/entities/settingEntity'
 import { CredentialEntity } from './src/entities/credentialEntity'
-import { MasterKeyEntity } from './src/entities/masterKeyEntity'
+import { EncryptedWalletEntity } from './src/entities/encryptedWalletEntity'
 import { SignatureEntity } from './src/entities/signatureEntity'
 import { VerifiableCredentialEntity } from './src/entities/verifiableCredentialEntity'
 import { CacheEntity } from './src/entities/cacheEntity'
 import { InteractionTokenEntity } from './src/entities/interactionTokenEntity'
 
 export {
+  SettingEntity,
   CredentialEntity,
-  MasterKeyEntity,
+  EncryptedWalletEntity,
   SignatureEntity,
   VerifiableCredentialEntity,
   CacheEntity,
@@ -18,7 +19,7 @@ export {
 export const entityList = [
   SettingEntity,
   CredentialEntity,
-  MasterKeyEntity,
+  EncryptedWalletEntity,
   SignatureEntity,
   VerifiableCredentialEntity,
   CacheEntity,
