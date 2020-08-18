@@ -6,6 +6,8 @@ const credentialEntity_1 = require("./src/entities/credentialEntity");
 exports.CredentialEntity = credentialEntity_1.CredentialEntity;
 const encryptedWalletEntity_1 = require("./src/entities/encryptedWalletEntity");
 exports.EncryptedWalletEntity = encryptedWalletEntity_1.EncryptedWalletEntity;
+const eventLogEntity_1 = require("./src/entities/eventLogEntity");
+exports.EventLogEntity = eventLogEntity_1.EventLogEntity;
 const signatureEntity_1 = require("./src/entities/signatureEntity");
 exports.SignatureEntity = signatureEntity_1.SignatureEntity;
 const verifiableCredentialEntity_1 = require("./src/entities/verifiableCredentialEntity");
@@ -18,6 +20,7 @@ exports.entityList = [
     settingEntity_1.SettingEntity,
     credentialEntity_1.CredentialEntity,
     encryptedWalletEntity_1.EncryptedWalletEntity,
+    eventLogEntity_1.EventLogEntity,
     signatureEntity_1.SignatureEntity,
     verifiableCredentialEntity_1.VerifiableCredentialEntity,
     cacheEntity_1.CacheEntity,
