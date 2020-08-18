@@ -264,15 +264,15 @@ class JolocomTypeormStorage {
             });
         });
     }
-    appendEvent(id, eventStream) {
+    appendEvent(id, events) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return yield this.connection.manager.findOne(eventLogEntity_1.EventLogEntity, id).then((el) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                 if (!el) {
-                    const nel = { id, eventStream };
+                    const nel = { id, events: JSON.stringify(events) };
                     yield this.connection.manager.save(nel);
                 }
                 else {
-                    el.eventStream = JSON.stringify([...JSON.parse(el.eventStream), ...eventStream]);
+                    el.eventStream = JSON.stringify([...JSON.parse(el.eventStream), ...events]);
                     yield this.connection.manager.save(el);
                 }
                 return true;

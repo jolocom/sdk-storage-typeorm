@@ -307,13 +307,13 @@ export class JolocomTypeormStorage implements IStorage {
     })
   }
   
-  private async appendEvent(id: string, eventStream: string[]): Promise<boolean> {
+  private async appendEvent(id: string, events: string[]): Promise<boolean> {
     return await this.connection.manager.findOne(EventLogEntity, id).then(async (el) => {
       if (!el) {
-        const nel = { id, eventStream }
+        const nel = { id, events: JSON.stringify(events) }
         await this.connection.manager.save(nel)
       } else {
-        el.eventStream = JSON.stringify([...JSON.parse(el.eventStream),...eventStream])
+        el.eventStream = JSON.stringify([...JSON.parse(el.eventStream),...events])
         await this.connection.manager.save(el)
       }
       return true
