@@ -302,7 +302,7 @@ export class JolocomTypeormStorage implements IStorage {
 
   private async readEventLog(id: string): Promise<string[]> {
     return await this.connection.manager.findOne(EventLogEntity, id).then(el => {
-      if (!el) throw new Error("no Event Log found for id: " + id)
+      if (!el) return []
       return JSON.parse(el.eventStream)
     })
   }
@@ -310,7 +310,7 @@ export class JolocomTypeormStorage implements IStorage {
   private async appendEvent(id: string, events: string[]): Promise<boolean> {
     return await this.connection.manager.findOne(EventLogEntity, id).then(async (el) => {
       if (!el) {
-        const nel = { id, events: JSON.stringify(events) }
+        const nel = plainToClass(EventLogEntity, { id, eventStream: JSON.stringify(events) })
         await this.connection.manager.save(nel)
       } else {
         el.eventStream = JSON.stringify([...JSON.parse(el.eventStream),...events])

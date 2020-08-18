@@ -259,7 +259,7 @@ class JolocomTypeormStorage {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return yield this.connection.manager.findOne(eventLogEntity_1.EventLogEntity, id).then(el => {
                 if (!el)
-                    throw new Error("no Event Log found for id: " + id);
+                    return [];
                 return JSON.parse(el.eventStream);
             });
         });
@@ -268,7 +268,7 @@ class JolocomTypeormStorage {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return yield this.connection.manager.findOne(eventLogEntity_1.EventLogEntity, id).then((el) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                 if (!el) {
-                    const nel = { id, events: JSON.stringify(events) };
+                    const nel = class_transformer_1.plainToClass(eventLogEntity_1.EventLogEntity, { id, eventStream: JSON.stringify(events) });
                     yield this.connection.manager.save(nel);
                 }
                 else {
