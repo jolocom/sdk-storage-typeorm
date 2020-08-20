@@ -15,20 +15,20 @@
   "author": "Jolocom Dev <dev@jolocom.com>",
   "license": "MIT",
   "peerDependencies": {
-    "typeorm": "^0.2.24",
-    "jolocom-lib": "^5.0.3",
-    "@jolocom/sdk": "^0.13.0"
+    "@jolocom/sdk": "^0.18.0",
+    "jolocom-lib": "^5.0.9",
+    "typeorm": "^0.2.24"
   },
   "dependencies": {
     "class-transformer": "^0.2.3",
     "ramda": "^0.27.1"
   },
   "devDependencies": {
-    "typeorm": "^0.2.24",
+    "@jolocom/sdk": "^0.18.1",
     "@types/ramda": "^0.27.14",
-    "jolocom-lib": "^5.0.4",
-    "@jolocom/sdk": "^0.13.0",
+    "jolocom-lib": "^5.0.9",
     "local-did-resolver": "^0.3.0",
+    "typeorm": "^0.2.24",
     "typescript": "^3.8.3"
   },
   "keywords": [
