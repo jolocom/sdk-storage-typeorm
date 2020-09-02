@@ -118,7 +118,7 @@ export class JolocomTypeormStorage implements IStorage {
         'credential.verifiableCredential',
         'verifiableCredential',
       )
-      .where('verifiableCredential.type = :type', { type })
+      .where('verifiableCredential.type = :type', { type: type.toString() })
       .getMany()
 
     const results = groupAttributesByCredentialId(localAttributes).map(
