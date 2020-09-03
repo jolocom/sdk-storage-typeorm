@@ -96,7 +96,7 @@ class JolocomTypeormStorage {
                 .getRepository(credentialEntity_1.CredentialEntity)
                 .createQueryBuilder('credential')
                 .leftJoinAndSelect('credential.verifiableCredential', 'verifiableCredential')
-                .where('verifiableCredential.type = :type', { type })
+                .where('verifiableCredential.type = :type', { type: type.toString() })
                 .getMany();
             const results = utils_1.groupAttributesByCredentialId(localAttributes).map((entry) => ({
                 verification: entry.verifiableCredential.id,
