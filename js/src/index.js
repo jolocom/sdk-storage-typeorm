@@ -259,8 +259,8 @@ class JolocomTypeormStorage {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return yield this.connection.manager.findOne(eventLogEntity_1.EventLogEntity, id).then(el => {
                 if (!el)
-                    return [];
-                return JSON.parse(el.eventStream);
+                    return "";
+                return el.eventStream;
             });
         });
     }
@@ -268,11 +268,11 @@ class JolocomTypeormStorage {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return yield this.connection.manager.findOne(eventLogEntity_1.EventLogEntity, id).then((el) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                 if (!el) {
-                    const nel = class_transformer_1.plainToClass(eventLogEntity_1.EventLogEntity, { id, eventStream: JSON.stringify(events) });
+                    const nel = class_transformer_1.plainToClass(eventLogEntity_1.EventLogEntity, { id, eventStream: events });
                     yield this.connection.manager.save(nel);
                 }
                 else {
-                    el.eventStream = JSON.stringify([...JSON.parse(el.eventStream), ...events]);
+                    el.eventStream = el.eventStream + events;
                     yield this.connection.manager.save(el);
                 }
                 return true;

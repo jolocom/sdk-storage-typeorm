@@ -19,7 +19,7 @@ import {
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
 import { groupAttributesByCredentialId } from './utils'
-import { InternalDb } from 'local-did-resolver'
+import { InternalDb } from '@jolocom/local-resolver-registrar/js/db'
 
 import {
   JWTEncodable,

@@ -4,7 +4,7 @@ import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/si
 import { CredentialOfferMetadata, CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types';
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types';
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument';
-import { InternalDb } from 'local-did-resolver';
+import { InternalDb } from '@jolocom/local-resolver-registrar/js/db';
 import { JWTEncodable, JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
 export interface PersonaAttributes {
     did: string;
