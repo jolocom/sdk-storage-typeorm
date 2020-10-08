@@ -1,8 +1,8 @@
-import { IStorage, EncryptedWalletAttributes, EncryptedSeedAttributes } from '@jolocom/sdk/js/src/lib/storage';
+import { IStorage, EncryptedWalletAttributes, EncryptedSeedAttributes } from '@jolocom/sdk/js/storage';
 import { Connection } from 'typeorm';
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
 import { CredentialOfferMetadata, CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types';
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types';
+import { IdentitySummary } from '@jolocom/sdk/js/types';
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument';
 import { InternalDb } from '@jolocom/local-resolver-registrar/js/db';
 import { JWTEncodable, JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
