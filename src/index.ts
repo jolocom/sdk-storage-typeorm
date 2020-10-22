@@ -9,7 +9,7 @@ import { InteractionTokenEntity } from './entities/interactionTokenEntity'
 import { EventLogEntity } from './entities/eventLogEntity'
 import { EncryptedWalletEntity } from './entities/encryptedWalletEntity'
 
-import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
+import { IStorage } from '@jolocom/sdk/js/src/storage'
 import { Connection } from 'typeorm'
 import { plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -17,9 +17,9 @@ import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
+import { IdentitySummary } from '@jolocom/sdk/js/src/types'
 import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
-import { groupAttributesByCredentialId } from '@jolocom/sdk/js/src/lib/storage/utils'
+import { groupAttributesByCredentialId } from '@jolocom/sdk/js/src/storage/utils'
 import { InternalDb } from 'local-did-resolver'
 
 import {
