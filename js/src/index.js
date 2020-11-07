@@ -11,7 +11,6 @@ const interactionTokenEntity_1 = require("./entities/interactionTokenEntity");
 const eventLogEntity_1 = require("./entities/eventLogEntity");
 const encryptedWalletEntity_1 = require("./entities/encryptedWalletEntity");
 const class_transformer_1 = require("class-transformer");
-const didDocument_1 = require("jolocom-lib/js/identity/didDocument/didDocument");
 const utils_1 = require("./utils");
 const jolocom_lib_1 = require("jolocom-lib");
 const identity_1 = require("jolocom-lib/js/identity/identity");
@@ -168,14 +167,6 @@ class JolocomTypeormStorage {
             return (issuerProfile && issuerProfile.value) || { did };
         });
     }
-    getCachedDIDDoc(did) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const [entry] = yield this.connection.manager.findByIds(cacheEntity_1.CacheEntity, [
-                `didCache:${did}`,
-            ]);
-            return didDocument_1.DidDocument.fromJSON(entry.value);
-        });
-    }
     getCachedIdentity(did) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const [entry] = yield this.connection.manager.findByIds(identityCacheEntity_1.IdentityCacheEntity, [
@@ -211,15 +202,6 @@ class JolocomTypeormStorage {
             const cacheEntry = class_transformer_1.plainToClass(cacheEntity_1.CacheEntity, {
                 key: issuer.did,
                 value: issuer,
-            });
-            yield this.connection.manager.save(cacheEntry);
-        });
-    }
-    cacheDIDDoc(doc) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const cacheEntry = class_transformer_1.plainToClass(cacheEntity_1.CacheEntity, {
-                key: `didCache:${doc.did}`,
-                value: doc.toJSON(),
             });
             yield this.connection.manager.save(cacheEntry);
         });

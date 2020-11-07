@@ -1,11 +1,11 @@
-import { IStorage, EncryptedWalletAttributes, EncryptedSeedAttributes } from '@jolocom/sdk/js/src/lib/storage';
+import { IStorage, EncryptedWalletAttributes, EncryptedSeedAttributes } from '@jolocom/sdk/js/storage';
 import { Connection } from 'typeorm';
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
 import { CredentialOfferMetadata, CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types';
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types';
 import { InternalDb } from '@jolocom/local-resolver-registrar/js/db';
 import { JWTEncodable, JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
 import { Identity } from 'jolocom-lib/js/identity/identity';
+import { IdentitySummary } from '@jolocom/sdk/js/types';
 export interface PersonaAttributes {
     did: string;
     controllingKeyPath: string;
@@ -69,13 +69,11 @@ export declare class JolocomTypeormStorage implements IStorage {
     private findTokens;
     private getMetadataForCredential;
     private getPublicProfile;
-    private getCachedDIDDoc;
     private getCachedIdentity;
     private storeEncryptedWallet;
     private storeEncryptedSeed;
     private storeCredentialMetadata;
     private storeIssuerProfile;
-    private cacheDIDDoc;
     private cacheIdentity;
     private storeInteractionToken;
     private storeVClaim;

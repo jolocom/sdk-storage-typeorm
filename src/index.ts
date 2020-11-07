@@ -8,7 +8,7 @@ import { InteractionTokenEntity } from './entities/interactionTokenEntity'
 import { EventLogEntity } from './entities/eventLogEntity'
 import { EncryptedWalletEntity } from './entities/encryptedWalletEntity'
 
-import { IStorage, EncryptedWalletAttributes, EncryptedSeedAttributes } from '@jolocom/sdk/js/src/lib/storage'
+import { IStorage, EncryptedWalletAttributes, EncryptedSeedAttributes } from '@jolocom/sdk/js/storage'
 import { Connection } from 'typeorm'
 import { plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -16,8 +16,6 @@ import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
-import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
 import { groupAttributesByCredentialId } from './utils'
 import { InternalDb } from '@jolocom/local-resolver-registrar/js/db'
 
@@ -28,6 +26,7 @@ import {
 import { JolocomLib } from 'jolocom-lib'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { IdentityCacheEntity } from './entities/identityCacheEntity'
+import { IdentitySummary } from '@jolocom/sdk/js/types'
 
 export interface PersonaAttributes {
   did: string
@@ -200,14 +199,6 @@ export class JolocomTypeormStorage implements IStorage {
     return (issuerProfile && issuerProfile.value) || { did }
   }
 
-  private async getCachedDIDDoc(did: string): Promise<DidDocument> {
-    const [entry] = await this.connection.manager.findByIds(CacheEntity, [
-      `didCache:${did}`,
-    ])
-
-    return DidDocument.fromJSON(entry.value)
-  }
-
   private async getCachedIdentity(did: string): Promise<Identity> {
     const [entry] = await this.connection.manager.findByIds(IdentityCacheEntity, [
       did
@@ -247,15 +238,6 @@ export class JolocomTypeormStorage implements IStorage {
     const cacheEntry = plainToClass(CacheEntity, {
       key: issuer.did,
       value: issuer,
-    })
-
-    await this.connection.manager.save(cacheEntry)
-  }
-
-  private async cacheDIDDoc(doc: DidDocument) {
-    const cacheEntry = plainToClass(CacheEntity, {
-      key: `didCache:${doc.did}`,
-      value: doc.toJSON(),
     })
 
     await this.connection.manager.save(cacheEntry)
