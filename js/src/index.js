@@ -172,7 +172,7 @@ class JolocomTypeormStorage {
             const [entry] = yield this.connection.manager.findByIds(identityCacheEntity_1.IdentityCacheEntity, [
                 did
             ]);
-            return identity_1.Identity.fromJSON(entry.value);
+            return entry && entry.value && identity_1.Identity.fromJSON(entry.value);
         });
     }
     storeEncryptedWallet(args) {

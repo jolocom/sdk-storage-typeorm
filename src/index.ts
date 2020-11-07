@@ -199,12 +199,12 @@ export class JolocomTypeormStorage implements IStorage {
     return (issuerProfile && issuerProfile.value) || { did }
   }
 
-  private async getCachedIdentity(did: string): Promise<Identity> {
+  private async getCachedIdentity(did: string): Promise<undefined | Identity> {
     const [entry] = await this.connection.manager.findByIds(IdentityCacheEntity, [
       did
     ])
 
-    return Identity.fromJSON(entry.value)
+    return entry && entry.value && Identity.fromJSON(entry.value)
   }
   
   private async storeEncryptedWallet(
