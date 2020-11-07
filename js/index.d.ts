@@ -6,6 +6,7 @@ import { SignatureEntity } from './src/entities/signatureEntity';
 import { VerifiableCredentialEntity } from './src/entities/verifiableCredentialEntity';
 import { CacheEntity } from './src/entities/cacheEntity';
 import { InteractionTokenEntity } from './src/entities/interactionTokenEntity';
-export { SettingEntity, CredentialEntity, EncryptedWalletEntity, EventLogEntity, SignatureEntity, VerifiableCredentialEntity, CacheEntity, InteractionTokenEntity, };
+import { IdentityCacheEntity } from './src/entities/identityCacheEntity';
+export { SettingEntity, CredentialEntity, EncryptedWalletEntity, EventLogEntity, SignatureEntity, VerifiableCredentialEntity, CacheEntity, InteractionTokenEntity, IdentityCacheEntity };
 export declare const entityList: (typeof SettingEntity | typeof EncryptedWalletEntity | typeof SignatureEntity | typeof VerifiableCredentialEntity | typeof CredentialEntity | typeof InteractionTokenEntity | typeof EventLogEntity)[];
 export { JolocomTypeormStorage } from './src';
