@@ -3,9 +3,9 @@ import { Connection } from 'typeorm';
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
 import { CredentialOfferMetadata, CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types';
 import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types';
-import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument';
 import { InternalDb } from '@jolocom/local-resolver-registrar/js/db';
 import { JWTEncodable, JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
+import { Identity } from 'jolocom-lib/js/identity/identity';
 export interface PersonaAttributes {
     did: string;
     controllingKeyPath: string;
@@ -25,7 +25,7 @@ export declare class JolocomTypeormStorage implements IStorage {
         encryptedWallet: (args: EncryptedWalletAttributes) => Promise<void>;
         credentialMetadata: (credentialMetadata: CredentialMetadataSummary) => Promise<void>;
         issuerProfile: (issuer: IdentitySummary) => Promise<void>;
-        didDoc: (doc: DidDocument) => Promise<void>;
+        identity: (identity: Identity) => Promise<void>;
         interactionToken: (token: JSONWebToken<JWTEncodable>) => Promise<void>;
     };
     get: {
@@ -47,7 +47,7 @@ export declare class JolocomTypeormStorage implements IStorage {
         encryptedWallet: (id?: string | undefined) => Promise<EncryptedWalletAttributes | null>;
         credentialMetadata: ({ issuer, type: credentialType, }: SignedCredential) => Promise<any>;
         publicProfile: (did: string) => Promise<IdentitySummary>;
-        didDoc: (did: string) => Promise<DidDocument>;
+        identity: (did: string) => Promise<Identity>;
         interactionTokens: (attrs: {
             nonce?: string | undefined;
             type?: string | undefined;
@@ -70,11 +70,13 @@ export declare class JolocomTypeormStorage implements IStorage {
     private getMetadataForCredential;
     private getPublicProfile;
     private getCachedDIDDoc;
+    private getCachedIdentity;
     private storeEncryptedWallet;
     private storeEncryptedSeed;
     private storeCredentialMetadata;
     private storeIssuerProfile;
     private cacheDIDDoc;
+    private cacheIdentity;
     private storeInteractionToken;
     private storeVClaim;
     private deleteVCred;

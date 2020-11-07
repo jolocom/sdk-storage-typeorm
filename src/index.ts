@@ -51,7 +51,6 @@ export class JolocomTypeormStorage implements IStorage {
     encryptedWallet: this.storeEncryptedWallet.bind(this),
     credentialMetadata: this.storeCredentialMetadata.bind(this),
     issuerProfile: this.storeIssuerProfile.bind(this),
-    didDoc: this.cacheDIDDoc.bind(this),
     identity: this.cacheIdentity.bind(this),
     interactionToken: this.storeInteractionToken.bind(this),
   }
@@ -66,7 +65,6 @@ export class JolocomTypeormStorage implements IStorage {
     encryptedWallet: this.getEncryptedWallet.bind(this),
     credentialMetadata: this.getMetadataForCredential.bind(this),
     publicProfile: this.getPublicProfile.bind(this),
-    didDoc: this.getCachedDIDDoc.bind(this),
     identity: this.getCachedIdentity.bind(this),
     interactionTokens: this.findTokens.bind(this)
   }

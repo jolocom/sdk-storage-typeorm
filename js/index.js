@@ -16,6 +16,8 @@ const cacheEntity_1 = require("./src/entities/cacheEntity");
 exports.CacheEntity = cacheEntity_1.CacheEntity;
 const interactionTokenEntity_1 = require("./src/entities/interactionTokenEntity");
 exports.InteractionTokenEntity = interactionTokenEntity_1.InteractionTokenEntity;
+const identityCacheEntity_1 = require("./src/entities/identityCacheEntity");
+exports.IdentityCacheEntity = identityCacheEntity_1.IdentityCacheEntity;
 exports.entityList = [
     settingEntity_1.SettingEntity,
     credentialEntity_1.CredentialEntity,
@@ -25,6 +27,7 @@ exports.entityList = [
     verifiableCredentialEntity_1.VerifiableCredentialEntity,
     cacheEntity_1.CacheEntity,
     interactionTokenEntity_1.InteractionTokenEntity,
+    identityCacheEntity_1.IdentityCacheEntity
 ];
 var src_1 = require("./src");
 exports.JolocomTypeormStorage = src_1.JolocomTypeormStorage;
