@@ -6,6 +6,7 @@ import { SignatureEntity } from './src/entities/signatureEntity'
 import { VerifiableCredentialEntity } from './src/entities/verifiableCredentialEntity'
 import { CacheEntity } from './src/entities/cacheEntity'
 import { InteractionTokenEntity } from './src/entities/interactionTokenEntity'
+import { IdentityCacheEntity } from './src/entities/identityCacheEntity'
 
 export {
   SettingEntity,
@@ -16,6 +17,7 @@ export {
   VerifiableCredentialEntity,
   CacheEntity,
   InteractionTokenEntity,
+  IdentityCacheEntity
 }
 
 export const entityList = [
@@ -27,6 +29,7 @@ export const entityList = [
   VerifiableCredentialEntity,
   CacheEntity,
   InteractionTokenEntity,
+  IdentityCacheEntity
 ]
 
 export { JolocomTypeormStorage } from './src'

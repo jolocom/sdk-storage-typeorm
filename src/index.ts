@@ -16,8 +16,6 @@ import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { IdentitySummary } from '@jolocom/sdk/js/types'
-import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
 import { groupAttributesByCredentialId } from './utils'
 import { InternalDb } from '@jolocom/local-resolver-registrar/js/db'
 
@@ -26,6 +24,9 @@ import {
   JSONWebToken,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { JolocomLib } from 'jolocom-lib'
+import { Identity } from 'jolocom-lib/js/identity/identity'
+import { IdentityCacheEntity } from './entities/identityCacheEntity'
+import { IdentitySummary } from '@jolocom/sdk/js/types'
 
 export interface PersonaAttributes {
   did: string
@@ -49,7 +50,7 @@ export class JolocomTypeormStorage implements IStorage {
     encryptedWallet: this.storeEncryptedWallet.bind(this),
     credentialMetadata: this.storeCredentialMetadata.bind(this),
     issuerProfile: this.storeIssuerProfile.bind(this),
-    didDoc: this.cacheDIDDoc.bind(this),
+    identity: this.cacheIdentity.bind(this),
     interactionToken: this.storeInteractionToken.bind(this),
   }
 
@@ -63,7 +64,7 @@ export class JolocomTypeormStorage implements IStorage {
     encryptedWallet: this.getEncryptedWallet.bind(this),
     credentialMetadata: this.getMetadataForCredential.bind(this),
     publicProfile: this.getPublicProfile.bind(this),
-    didDoc: this.getCachedDIDDoc.bind(this),
+    identity: this.getCachedIdentity.bind(this),
     interactionTokens: this.findTokens.bind(this)
   }
 
@@ -198,12 +199,12 @@ export class JolocomTypeormStorage implements IStorage {
     return (issuerProfile && issuerProfile.value) || { did }
   }
 
-  private async getCachedDIDDoc(did: string): Promise<DidDocument> {
-    const [entry] = await this.connection.manager.findByIds(CacheEntity, [
-      `didCache:${did}`,
+  private async getCachedIdentity(did: string): Promise<undefined | Identity> {
+    const [entry] = await this.connection.manager.findByIds(IdentityCacheEntity, [
+      did
     ])
 
-    return DidDocument.fromJSON(entry.value)
+    return entry && entry.value && Identity.fromJSON(entry.value)
   }
 
   private async storeEncryptedWallet(
@@ -242,10 +243,10 @@ export class JolocomTypeormStorage implements IStorage {
     await this.connection.manager.save(cacheEntry)
   }
 
-  private async cacheDIDDoc(doc: DidDocument) {
-    const cacheEntry = plainToClass(CacheEntity, {
-      key: `didCache:${doc.did}`,
-      value: doc.toJSON(),
+  private async cacheIdentity(identity: Identity) {
+    const cacheEntry = plainToClass(IdentityCacheEntity, {
+      key: identity.did,
+      value: identity.toJSON()
     })
 
     await this.connection.manager.save(cacheEntry)
@@ -306,7 +307,7 @@ export class JolocomTypeormStorage implements IStorage {
       return el.eventStream
     })
   }
-  
+
   private async appendEvent(id: string, events: string): Promise<boolean> {
     return await this.connection.manager.findOne(EventLogEntity, id).then(async (el) => {
       if (!el) {
