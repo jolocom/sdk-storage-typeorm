@@ -19,7 +19,7 @@ export class InteractionTokenEntity {
   @Column()
   issuer!: string
 
-  @Column()
+  @Column("bigint")
   timestamp!: number
 
   @Column("text")

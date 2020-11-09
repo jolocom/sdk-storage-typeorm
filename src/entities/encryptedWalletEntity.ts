@@ -5,9 +5,9 @@ export class EncryptedWalletEntity {
   @PrimaryColumn({ length: 100 })
   id!: string
 
-  @Column()
+  @Column("bigint")
   timestamp!: number
-  
+
   @Column("text")
   encryptedWallet!: string
 }

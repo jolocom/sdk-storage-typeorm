@@ -9,7 +9,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", String)
 ], EncryptedWalletEntity.prototype, "id", void 0);
 tslib_1.__decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column("bigint"),
     tslib_1.__metadata("design:type", Number)
 ], EncryptedWalletEntity.prototype, "timestamp", void 0);
 tslib_1.__decorate([

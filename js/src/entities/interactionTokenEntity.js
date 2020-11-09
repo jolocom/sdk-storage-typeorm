@@ -32,7 +32,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", String)
 ], InteractionTokenEntity.prototype, "issuer", void 0);
 tslib_1.__decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column("bigint"),
     tslib_1.__metadata("design:type", Number)
 ], InteractionTokenEntity.prototype, "timestamp", void 0);
 tslib_1.__decorate([
