@@ -4,9 +4,12 @@ import { JolocomTypeormStorage } from '../src'
 
 beforeEach(async () =>
   createConnection({
-    type: 'sqlite',
-    database: ':memory:',
-    dropSchema: true,
+    type: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    username: 'typeormtest',
+    password: 'password',
+    database: 'typeormtest',
     entities: [
       'src/entities/*.ts',
     ],
