@@ -28,8 +28,7 @@ test('Create identity', async () => {
     storage: new JolocomTypeormStorage(getConnection()),
   })
   const agent = await SDK.createAgent("pass", "jun")
-  console.log(agent)
 
   const ewa = await SDK.storage.get.encryptedWallet(agent.idw.did)
-  console.log(typeof ewa!.timestamp)
+  expect(typeof ewa!.timestamp).toBe('number')
 })
