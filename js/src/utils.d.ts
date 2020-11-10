@@ -1,4 +1,5 @@
 import { CredentialEntity } from './entities/credentialEntity';
+import { ValueTransformer } from 'typeorm';
 /**
  * Given an array of Credential Entities, will attempt to group them by
  * the credential they are part of, and return a sumarry, contain a key name
@@ -16,3 +17,4 @@ export declare const groupAttributesByCredentialId: (credentials: CredentialEnti
     verifiableCredential: import("..").VerifiableCredentialEntity;
     propertyName: string;
 }[];
+export declare const numberTransformer: ValueTransformer;
