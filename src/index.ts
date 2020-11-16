@@ -1,7 +1,5 @@
 import { SettingEntity } from './entities/settingEntity'
 import { CredentialEntity } from './entities/credentialEntity'
-import { MasterKeyEntity } from './entities/masterKeyEntity'
-import { PersonaEntity } from './entities/personaEntity'
 import { SignatureEntity } from './entities/signatureEntity'
 import { VerifiableCredentialEntity } from './entities/verifiableCredentialEntity'
 import { CacheEntity } from './entities/cacheEntity'
@@ -9,7 +7,7 @@ import { InteractionTokenEntity } from './entities/interactionTokenEntity'
 import { EventLogEntity } from './entities/eventLogEntity'
 import { EncryptedWalletEntity } from './entities/encryptedWalletEntity'
 
-import { IStorage } from '@jolocom/sdk/js/src/lib/storage'
+import { IStorage, EncryptedWalletAttributes } from '@jolocom/sdk/js/storage'
 import { Connection } from 'typeorm'
 import { plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -17,31 +15,21 @@ import {
   CredentialOfferMetadata,
   CredentialOfferRenderInfo,
 } from 'jolocom-lib/js/interactionTokens/interactionTokens.types'
-import { IdentitySummary } from '@jolocom/sdk/js/src/lib/types'
-import { DidDocument } from 'jolocom-lib/js/identity/didDocument/didDocument'
-import { groupAttributesByCredentialId } from '@jolocom/sdk/js/src/lib/storage/utils'
-import { InternalDb } from 'local-did-resolver'
+import { groupAttributesByCredentialId } from './utils'
+import { InternalDb } from '@jolocom/local-resolver-registrar/js/db'
 
 import {
   JWTEncodable,
   JSONWebToken,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
 import { JolocomLib } from 'jolocom-lib'
+import { Identity } from 'jolocom-lib/js/identity/identity'
+import { IdentityCacheEntity } from './entities/identityCacheEntity'
+import { IdentitySummary } from '@jolocom/sdk/js/types'
 
 export interface PersonaAttributes {
   did: string
   controllingKeyPath: string
-}
-
-export interface EncryptedSeedAttributes {
-  encryptedEntropy: string
-  timestamp: number
-}
-
-export interface EncryptedWalletAttributes {
-  id: string
-  encryptedWallet: string
-  timestamp: number
 }
 
 /**
@@ -56,28 +44,24 @@ export class JolocomTypeormStorage implements IStorage {
 
   public store = {
     setting: this.saveSetting.bind(this),
-    persona: this.storePersonaFromJSON.bind(this),
     verifiableCredential: this.storeVClaim.bind(this),
-    encryptedSeed: this.storeEncryptedSeed.bind(this),
     encryptedWallet: this.storeEncryptedWallet.bind(this),
     credentialMetadata: this.storeCredentialMetadata.bind(this),
     issuerProfile: this.storeIssuerProfile.bind(this),
-    didDoc: this.cacheDIDDoc.bind(this),
+    identity: this.cacheIdentity.bind(this),
     interactionToken: this.storeInteractionToken.bind(this),
   }
 
   public get = {
     settingsObject: this.getSettingsObject.bind(this),
     setting: this.getSetting.bind(this),
-    persona: this.getPersonas.bind(this),
     verifiableCredential: this.getVCredential.bind(this),
     attributesByType: this.getAttributesByType.bind(this),
     vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
-    encryptedSeed: this.getEncryptedSeed.bind(this),
     encryptedWallet: this.getEncryptedWallet.bind(this),
     credentialMetadata: this.getMetadataForCredential.bind(this),
     publicProfile: this.getPublicProfile.bind(this),
-    didDoc: this.getCachedDIDDoc.bind(this),
+    identity: this.getCachedIdentity.bind(this),
     interactionTokens: this.findTokens.bind(this)
   }
 
@@ -112,11 +96,6 @@ export class JolocomTypeormStorage implements IStorage {
     await repo.save(setting)
   }
 
-  // TODO: refactor needed on multiple personas
-  private async getPersonas(query?: object): Promise<PersonaEntity[]> {
-    return this.connection.manager.find(PersonaEntity)
-  }
-
   private async getVCredential(query?: object): Promise<SignedCredential[]> {
     const entities = await this.connection.manager.find(
       VerifiableCredentialEntity,
@@ -137,7 +116,7 @@ export class JolocomTypeormStorage implements IStorage {
         'credential.verifiableCredential',
         'verifiableCredential',
       )
-      .where('verifiableCredential.type = :type', { type })
+      .where('verifiableCredential.type = :type', { type: type.toString() })
       .getMany()
 
     const results = groupAttributesByCredentialId(localAttributes).map(
@@ -166,23 +145,16 @@ export class JolocomTypeormStorage implements IStorage {
     return entities.map(e => e.toVerifiableCredential())
   }
 
-  private async getEncryptedWallet(): Promise<EncryptedWalletAttributes | null> {
-    const walletEntities = await this.connection.manager.find(EncryptedWalletEntity)
-    if (walletEntities.length) {
-      const w = walletEntities[0]
+  private async getEncryptedWallet(id?: string): Promise<EncryptedWalletAttributes | null> {
+    const walletEntity = id
+      ? await this.connection.manager.findOne(EncryptedWalletEntity, { id })
+      : (await this.connection.manager.find(EncryptedWalletEntity))[0]
+    if (walletEntity) {
       return {
-        id: w.id,
-        encryptedWallet: w.encryptedWallet,
-        timestamp: w.timestamp
+        id: walletEntity.id,
+        encryptedWallet: walletEntity.encryptedWallet,
+        timestamp: walletEntity.timestamp
       }
-    }
-    return null
-  }
-
-  private async getEncryptedSeed(): Promise<string | null> {
-    const masterKeyEntity = await this.connection.manager.find(MasterKeyEntity)
-    if (masterKeyEntity.length) {
-      return masterKeyEntity[0].encryptedEntropy
     }
     return null
   }
@@ -216,17 +188,12 @@ export class JolocomTypeormStorage implements IStorage {
     return (issuerProfile && issuerProfile.value) || { did }
   }
 
-  private async getCachedDIDDoc(did: string): Promise<DidDocument> {
-    const [entry] = await this.connection.manager.findByIds(CacheEntity, [
-      `didCache:${did}`,
+  private async getCachedIdentity(did: string): Promise<undefined | Identity> {
+    const [entry] = await this.connection.manager.findByIds(IdentityCacheEntity, [
+      did
     ])
 
-    return DidDocument.fromJSON(entry.value)
-  }
-
-  private async storePersonaFromJSON(args: PersonaAttributes): Promise<void> {
-    const persona = plainToClass(PersonaEntity, args)
-    await this.connection.manager.save(persona)
+    return entry && entry.value && Identity.fromJSON(entry.value)
   }
 
   private async storeEncryptedWallet(
@@ -234,13 +201,6 @@ export class JolocomTypeormStorage implements IStorage {
   ): Promise<void> {
     const encryptedWallet = plainToClass(EncryptedWalletEntity, args)
     await this.connection.manager.save(encryptedWallet)
-  }
-
-  private async storeEncryptedSeed(
-    args: EncryptedSeedAttributes,
-  ): Promise<void> {
-    const encryptedSeed = plainToClass(MasterKeyEntity, args)
-    await this.connection.manager.save(encryptedSeed)
   }
 
   private async storeCredentialMetadata(
@@ -265,10 +225,10 @@ export class JolocomTypeormStorage implements IStorage {
     await this.connection.manager.save(cacheEntry)
   }
 
-  private async cacheDIDDoc(doc: DidDocument) {
-    const cacheEntry = plainToClass(CacheEntity, {
-      key: `didCache:${doc.did}`,
-      value: doc.toJSON(),
+  private async cacheIdentity(identity: Identity) {
+    const cacheEntry = plainToClass(IdentityCacheEntity, {
+      key: identity.did,
+      value: identity.toJSON()
     })
 
     await this.connection.manager.save(cacheEntry)
@@ -323,18 +283,22 @@ export class JolocomTypeormStorage implements IStorage {
       .execute()
   }
 
-  private async readEventLog(id: string): Promise<string[]> {
+  private async readEventLog(id: string): Promise<string> {
     return await this.connection.manager.findOne(EventLogEntity, id).then(el => {
-      if (!el) throw new Error("no Event Log found for id: " + id)
-      return el.events
+      if (!el) return ""
+      return el.eventStream
     })
   }
-  
-  private async appendEvent(id: string, events: string[]): Promise<boolean> {
+
+  private async appendEvent(id: string, events: string): Promise<boolean> {
     return await this.connection.manager.findOne(EventLogEntity, id).then(async (el) => {
-      if (!el) return false
-      el.events.push(...events)
-      await this.connection.manager.save(el)
+      if (!el) {
+        const nel = plainToClass(EventLogEntity, { id, eventStream: events })
+        await this.connection.manager.save(nel)
+      } else {
+        el.eventStream = el.eventStream + events
+        await this.connection.manager.save(el)
+      }
       return true
     })
   }

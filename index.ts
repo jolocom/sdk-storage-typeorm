@@ -1,31 +1,35 @@
 import { SettingEntity } from './src/entities/settingEntity'
 import { CredentialEntity } from './src/entities/credentialEntity'
-import { MasterKeyEntity } from './src/entities/masterKeyEntity'
-import { PersonaEntity } from './src/entities/personaEntity'
+import { EncryptedWalletEntity } from './src/entities/encryptedWalletEntity'
+import { EventLogEntity } from './src/entities/eventLogEntity'
 import { SignatureEntity } from './src/entities/signatureEntity'
 import { VerifiableCredentialEntity } from './src/entities/verifiableCredentialEntity'
 import { CacheEntity } from './src/entities/cacheEntity'
 import { InteractionTokenEntity } from './src/entities/interactionTokenEntity'
+import { IdentityCacheEntity } from './src/entities/identityCacheEntity'
 
 export {
+  SettingEntity,
   CredentialEntity,
-  MasterKeyEntity,
-  PersonaEntity,
+  EncryptedWalletEntity,
+  EventLogEntity,
   SignatureEntity,
   VerifiableCredentialEntity,
   CacheEntity,
   InteractionTokenEntity,
+  IdentityCacheEntity
 }
 
 export const entityList = [
   SettingEntity,
   CredentialEntity,
-  MasterKeyEntity,
-  PersonaEntity,
+  EncryptedWalletEntity,
+  EventLogEntity,
   SignatureEntity,
   VerifiableCredentialEntity,
   CacheEntity,
   InteractionTokenEntity,
+  IdentityCacheEntity
 ]
 
 export { JolocomTypeormStorage } from './src'
