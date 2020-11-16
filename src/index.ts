@@ -1,6 +1,5 @@
 import { SettingEntity } from './entities/settingEntity'
 import { CredentialEntity } from './entities/credentialEntity'
-import { MasterKeyEntity } from './entities/masterKeyEntity'
 import { SignatureEntity } from './entities/signatureEntity'
 import { VerifiableCredentialEntity } from './entities/verifiableCredentialEntity'
 import { CacheEntity } from './entities/cacheEntity'
@@ -8,7 +7,7 @@ import { InteractionTokenEntity } from './entities/interactionTokenEntity'
 import { EventLogEntity } from './entities/eventLogEntity'
 import { EncryptedWalletEntity } from './entities/encryptedWalletEntity'
 
-import { IStorage, EncryptedWalletAttributes, EncryptedSeedAttributes } from '@jolocom/sdk/js/storage'
+import { IStorage, EncryptedWalletAttributes } from '@jolocom/sdk/js/storage'
 import { Connection } from 'typeorm'
 import { plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -46,7 +45,6 @@ export class JolocomTypeormStorage implements IStorage {
   public store = {
     setting: this.saveSetting.bind(this),
     verifiableCredential: this.storeVClaim.bind(this),
-    encryptedSeed: this.storeEncryptedSeed.bind(this),
     encryptedWallet: this.storeEncryptedWallet.bind(this),
     credentialMetadata: this.storeCredentialMetadata.bind(this),
     issuerProfile: this.storeIssuerProfile.bind(this),
@@ -60,7 +58,6 @@ export class JolocomTypeormStorage implements IStorage {
     verifiableCredential: this.getVCredential.bind(this),
     attributesByType: this.getAttributesByType.bind(this),
     vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
-    encryptedSeed: this.getEncryptedSeed.bind(this),
     encryptedWallet: this.getEncryptedWallet.bind(this),
     credentialMetadata: this.getMetadataForCredential.bind(this),
     publicProfile: this.getPublicProfile.bind(this),
@@ -162,14 +159,6 @@ export class JolocomTypeormStorage implements IStorage {
     return null
   }
 
-  private async getEncryptedSeed(): Promise<string | null> {
-    const masterKeyEntity = await this.connection.manager.find(MasterKeyEntity)
-    if (masterKeyEntity.length) {
-      return masterKeyEntity[0].encryptedEntropy
-    }
-    return null
-  }
-
   private async findTokens(attrs: {
     nonce?: string
     type?: string
@@ -206,19 +195,12 @@ export class JolocomTypeormStorage implements IStorage {
 
     return entry && entry.value && Identity.fromJSON(entry.value)
   }
-  
+
   private async storeEncryptedWallet(
     args: EncryptedWalletAttributes,
   ): Promise<void> {
     const encryptedWallet = plainToClass(EncryptedWalletEntity, args)
     await this.connection.manager.save(encryptedWallet)
-  }
-
-  private async storeEncryptedSeed(
-    args: EncryptedSeedAttributes,
-  ): Promise<void> {
-    const encryptedSeed = plainToClass(MasterKeyEntity, args)
-    await this.connection.manager.save(encryptedSeed)
   }
 
   private async storeCredentialMetadata(
@@ -307,7 +289,7 @@ export class JolocomTypeormStorage implements IStorage {
       return el.eventStream
     })
   }
-  
+
   private async appendEvent(id: string, events: string): Promise<boolean> {
     return await this.connection.manager.findOne(EventLogEntity, id).then(async (el) => {
       if (!el) {

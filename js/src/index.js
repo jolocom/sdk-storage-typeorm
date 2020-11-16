@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const settingEntity_1 = require("./entities/settingEntity");
 const credentialEntity_1 = require("./entities/credentialEntity");
-const masterKeyEntity_1 = require("./entities/masterKeyEntity");
 const signatureEntity_1 = require("./entities/signatureEntity");
 const verifiableCredentialEntity_1 = require("./entities/verifiableCredentialEntity");
 const cacheEntity_1 = require("./entities/cacheEntity");
@@ -26,7 +25,6 @@ class JolocomTypeormStorage {
         this.store = {
             setting: this.saveSetting.bind(this),
             verifiableCredential: this.storeVClaim.bind(this),
-            encryptedSeed: this.storeEncryptedSeed.bind(this),
             encryptedWallet: this.storeEncryptedWallet.bind(this),
             credentialMetadata: this.storeCredentialMetadata.bind(this),
             issuerProfile: this.storeIssuerProfile.bind(this),
@@ -39,7 +37,6 @@ class JolocomTypeormStorage {
             verifiableCredential: this.getVCredential.bind(this),
             attributesByType: this.getAttributesByType.bind(this),
             vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
-            encryptedSeed: this.getEncryptedSeed.bind(this),
             encryptedWallet: this.getEncryptedWallet.bind(this),
             credentialMetadata: this.getMetadataForCredential.bind(this),
             publicProfile: this.getPublicProfile.bind(this),
@@ -135,15 +132,6 @@ class JolocomTypeormStorage {
             return null;
         });
     }
-    getEncryptedSeed() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const masterKeyEntity = yield this.connection.manager.find(masterKeyEntity_1.MasterKeyEntity);
-            if (masterKeyEntity.length) {
-                return masterKeyEntity[0].encryptedEntropy;
-            }
-            return null;
-        });
-    }
     findTokens(attrs) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             // return await connection.manager.find(InteractionTokenEntity)
@@ -179,12 +167,6 @@ class JolocomTypeormStorage {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const encryptedWallet = class_transformer_1.plainToClass(encryptedWalletEntity_1.EncryptedWalletEntity, args);
             yield this.connection.manager.save(encryptedWallet);
-        });
-    }
-    storeEncryptedSeed(args) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const encryptedSeed = class_transformer_1.plainToClass(masterKeyEntity_1.MasterKeyEntity, args);
-            yield this.connection.manager.save(encryptedSeed);
         });
     }
     storeCredentialMetadata(credentialMetadata) {

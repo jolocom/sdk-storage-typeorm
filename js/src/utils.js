@@ -19,3 +19,7 @@ exports.groupAttributesByCredentialId = (credentials) => {
     const groupedByCredential = Object.values(ramda_1.groupBy((credential) => credential.verifiableCredential.id, credentials));
     return groupedByCredential.map(credentials => (Object.assign(Object.assign({}, credentials[0]), { propertyValue: credentials.map(cred => cred.propertyValue) })));
 };
+exports.numberTransformer = {
+    to: (entityValue) => entityValue,
+    from: (databaseValue) => Number(databaseValue)
+};

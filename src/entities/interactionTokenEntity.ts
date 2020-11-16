@@ -4,6 +4,7 @@ import { PrimaryGeneratedColumn, Entity, Column } from 'typeorm'
 import {
   JSONWebToken,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
+import { numberTransformer } from '../utils'
 
 @Entity('interaction_tokens')
 export class InteractionTokenEntity {
@@ -19,7 +20,7 @@ export class InteractionTokenEntity {
   @Column()
   issuer!: string
 
-  @Column()
+  @Column("bigint", { transformer: [numberTransformer] })
   timestamp!: number
 
   @Column("text")

@@ -1,5 +1,6 @@
 import { CredentialEntity } from './entities/credentialEntity'
 import { groupBy } from 'ramda'
+import { ValueTransformer } from 'typeorm'
 
 /**
  * Given an array of Credential Entities, will attempt to group them by
@@ -30,4 +31,9 @@ export const groupAttributesByCredentialId = (
     ...credentials[0],
     propertyValue: credentials.map(cred => cred.propertyValue),
   }))
+}
+
+export const numberTransformer: ValueTransformer = {
+  to: (entityValue: number) => entityValue,
+  from: (databaseValue: string): number => Number(databaseValue)
 }

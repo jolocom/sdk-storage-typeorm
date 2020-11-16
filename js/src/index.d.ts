@@ -1,4 +1,4 @@
-import { IStorage, EncryptedWalletAttributes, EncryptedSeedAttributes } from '@jolocom/sdk/js/storage';
+import { IStorage, EncryptedWalletAttributes } from '@jolocom/sdk/js/storage';
 import { Connection } from 'typeorm';
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
 import { CredentialOfferMetadata, CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types';
@@ -21,7 +21,6 @@ export declare class JolocomTypeormStorage implements IStorage {
     store: {
         setting: (key: string, value: any) => Promise<void>;
         verifiableCredential: (vCred: SignedCredential) => Promise<void>;
-        encryptedSeed: (args: EncryptedSeedAttributes) => Promise<void>;
         encryptedWallet: (args: EncryptedWalletAttributes) => Promise<void>;
         credentialMetadata: (credentialMetadata: CredentialMetadataSummary) => Promise<void>;
         issuerProfile: (issuer: IdentitySummary) => Promise<void>;
@@ -43,7 +42,6 @@ export declare class JolocomTypeormStorage implements IStorage {
             }[];
         }>;
         vCredentialsByAttributeValue: (attribute: string) => Promise<SignedCredential[]>;
-        encryptedSeed: () => Promise<string | null>;
         encryptedWallet: (id?: string | undefined) => Promise<EncryptedWalletAttributes | null>;
         credentialMetadata: ({ issuer, type: credentialType, }: SignedCredential) => Promise<any>;
         publicProfile: (did: string) => Promise<IdentitySummary>;
@@ -65,13 +63,11 @@ export declare class JolocomTypeormStorage implements IStorage {
     private getAttributesByType;
     private getVCredentialsForAttribute;
     private getEncryptedWallet;
-    private getEncryptedSeed;
     private findTokens;
     private getMetadataForCredential;
     private getPublicProfile;
     private getCachedIdentity;
     private storeEncryptedWallet;
-    private storeEncryptedSeed;
     private storeCredentialMetadata;
     private storeIssuerProfile;
     private cacheIdentity;

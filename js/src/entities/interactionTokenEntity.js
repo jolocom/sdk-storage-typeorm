@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const class_transformer_1 = require("class-transformer");
 const typeorm_1 = require("typeorm");
+const utils_1 = require("../utils");
 let InteractionTokenEntity = InteractionTokenEntity_1 = class InteractionTokenEntity {
     static fromJWT(jwt) {
         return class_transformer_1.plainToClass(InteractionTokenEntity_1, {
@@ -32,7 +33,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", String)
 ], InteractionTokenEntity.prototype, "issuer", void 0);
 tslib_1.__decorate([
-    typeorm_1.Column(),
+    typeorm_1.Column("bigint", { transformer: [utils_1.numberTransformer] }),
     tslib_1.__metadata("design:type", Number)
 ], InteractionTokenEntity.prototype, "timestamp", void 0);
 tslib_1.__decorate([
