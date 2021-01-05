@@ -79,12 +79,9 @@ class JolocomTypeormStorage {
             yield repo.save(setting);
         });
     }
-    getVCredential(query) {
+    getVCredential(query, findOptions) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const entities = yield this.connection.manager.find(verifiableCredentialEntity_1.VerifiableCredentialEntity, {
-                where: query,
-                relations: ['claim', 'proof', 'subject'],
-            });
+            const entities = yield this.connection.manager.find(verifiableCredentialEntity_1.VerifiableCredentialEntity, Object.assign({ where: query, relations: ['claim', 'proof', 'subject'] }, findOptions));
             return entities.map(e => e.toVerifiableCredential());
         });
     }
@@ -104,16 +101,21 @@ class JolocomTypeormStorage {
             return { type, results };
         });
     }
-    getVCredentialsForAttribute(attribute) {
+    getVCredentialsForAttribute(attribute, findOptions) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const entities = yield this.connection
+            let query = yield this.connection
                 .getRepository(verifiableCredentialEntity_1.VerifiableCredentialEntity)
                 .createQueryBuilder('verifiableCredential')
                 .leftJoinAndSelect('verifiableCredential.claim', 'claim')
                 .leftJoinAndSelect('verifiableCredential.proof', 'proof')
                 .leftJoinAndSelect('verifiableCredential.subject', 'subject')
-                .where('claim.propertyValue = :attribute', { attribute })
-                .getMany();
+                .where('claim.propertyValue = :attribute', { attribute });
+            if (findOptions) {
+                query = query
+                    .skip(findOptions.skip)
+                    .take(findOptions.take);
+            }
+            const entities = yield query.getMany();
             return entities.map(e => e.toVerifiableCredential());
         });
     }
@@ -132,13 +134,11 @@ class JolocomTypeormStorage {
             return null;
         });
     }
-    findTokens(attrs) {
+    findTokens(attrs, findOptions) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             // return await connection.manager.find(InteractionTokenEntity)
             const entities = yield this.connection.manager
-                .find(interactionTokenEntity_1.InteractionTokenEntity, {
-                where: [attrs],
-            });
+                .find(interactionTokenEntity_1.InteractionTokenEntity, Object.assign({ where: [attrs] }, findOptions));
             return entities.map(entity => jolocom_lib_1.JolocomLib.parse.interactionToken.fromJWT(entity.original));
         });
     }

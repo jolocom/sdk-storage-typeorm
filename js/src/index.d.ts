@@ -1,4 +1,4 @@
-import { IStorage, EncryptedWalletAttributes } from '@jolocom/sdk/js/storage';
+import { IStorage, EncryptedWalletAttributes, FindOptions } from '@jolocom/sdk/js/storage';
 import { Connection } from 'typeorm';
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
 import { CredentialOfferMetadata, CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types';
@@ -32,7 +32,7 @@ export declare class JolocomTypeormStorage implements IStorage {
             [key: string]: any;
         }>;
         setting: (key: string) => Promise<any>;
-        verifiableCredential: (query?: object | undefined) => Promise<SignedCredential[]>;
+        verifiableCredential: (query?: object | undefined, findOptions?: FindOptions | undefined) => Promise<SignedCredential[]>;
         attributesByType: (type: string[]) => Promise<{
             type: string[];
             results: {
@@ -41,7 +41,7 @@ export declare class JolocomTypeormStorage implements IStorage {
                 fieldName: any;
             }[];
         }>;
-        vCredentialsByAttributeValue: (attribute: string) => Promise<SignedCredential[]>;
+        vCredentialsByAttributeValue: (attribute: string, findOptions?: FindOptions | undefined) => Promise<SignedCredential[]>;
         encryptedWallet: (id?: string | undefined) => Promise<EncryptedWalletAttributes | null>;
         credentialMetadata: ({ issuer, type: credentialType, }: SignedCredential) => Promise<any>;
         publicProfile: (did: string) => Promise<IdentitySummary>;
@@ -50,7 +50,7 @@ export declare class JolocomTypeormStorage implements IStorage {
             nonce?: string | undefined;
             type?: string | undefined;
             issuer?: string | undefined;
-        }) => Promise<JSONWebToken<JWTEncodable>[]>;
+        }, findOptions?: FindOptions | undefined) => Promise<JSONWebToken<JWTEncodable>[]>;
     };
     delete: {
         verifiableCredential: (id: string) => Promise<void>;
