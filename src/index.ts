@@ -7,7 +7,7 @@ import { InteractionTokenEntity } from './entities/interactionTokenEntity'
 import { EventLogEntity } from './entities/eventLogEntity'
 import { EncryptedWalletEntity } from './entities/encryptedWalletEntity'
 
-import { IStorage, EncryptedWalletAttributes } from '@jolocom/sdk/js/storage'
+import { IStorage, EncryptedWalletAttributes, FindOptions } from '@jolocom/sdk/js/storage'
 import { Connection } from 'typeorm'
 import { plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
@@ -96,12 +96,15 @@ export class JolocomTypeormStorage implements IStorage {
     await repo.save(setting)
   }
 
-  private async getVCredential(query?: object): Promise<SignedCredential[]> {
+  private async getVCredential(
+    query?: object, findOptions?: FindOptions
+  ): Promise<SignedCredential[]> {
     const entities = await this.connection.manager.find(
       VerifiableCredentialEntity,
       {
         where: query,
         relations: ['claim', 'proof', 'subject'],
+        ...findOptions
       },
     )
 
@@ -132,16 +135,23 @@ export class JolocomTypeormStorage implements IStorage {
 
   private async getVCredentialsForAttribute(
     attribute: string,
+    findOptions?: FindOptions
   ): Promise<SignedCredential[]> {
-    const entities = await this.connection
+    let query = await this.connection
       .getRepository(VerifiableCredentialEntity)
       .createQueryBuilder('verifiableCredential')
       .leftJoinAndSelect('verifiableCredential.claim', 'claim')
       .leftJoinAndSelect('verifiableCredential.proof', 'proof')
       .leftJoinAndSelect('verifiableCredential.subject', 'subject')
       .where('claim.propertyValue = :attribute', { attribute })
-      .getMany()
 
+    if (findOptions) {
+      query = query
+        .skip(findOptions.skip)
+        .take(findOptions.take)
+    }
+
+    const entities = await query.getMany()
     return entities.map(e => e.toVerifiableCredential())
   }
 
@@ -163,11 +173,12 @@ export class JolocomTypeormStorage implements IStorage {
     nonce?: string
     type?: string
     issuer?: string
-  }): Promise<JSONWebToken<JWTEncodable>[]> {
+  }, findOptions?: FindOptions): Promise<JSONWebToken<JWTEncodable>[]> {
     // return await connection.manager.find(InteractionTokenEntity)
     const entities = await this.connection.manager
       .find(InteractionTokenEntity, {
         where: [attrs],
+        ...findOptions
       })
     return entities.map(entity =>
       JolocomLib.parse.interactionToken.fromJWT(entity.original),
