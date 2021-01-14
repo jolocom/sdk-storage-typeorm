@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.numberTransformer = exports.groupAttributesByCredentialId = void 0;
 const ramda_1 = require("ramda");
 /**
  * Given an array of Credential Entities, will attempt to group them by

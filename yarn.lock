@@ -917,10 +917,10 @@
   dependencies:
     ethers "5.0.5"
 
-"@jolocom/sdk@^1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.0.1.tgz#7698691f3f18c490363c9f5694832c021bf1f8d1"
-  integrity sha512-71rtwrAGYZ4nJ0eDXQIZjq7orgeNkIfSAGigY2IR8A0BPl9pqsIsjy5lEOMETuGi1+nKo04alqjqyNTfEyT0hQ==
+"@jolocom/sdk@^1.1.0-rc0":
+  version "1.1.0-rc0"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.1.0-rc0.tgz#c6227e8af253703ba31d48b87e3c13e524826a65"
+  integrity sha512-cAEgmWnULPW3jyDDOe5lMCX5ZuERaWUeNjyXq+vjHcLBwlIIz6eR1GkBFdrVvxUwXNtpajSEvoC1adZk9GGyFw==
   dependencies:
     "@jolocom/protocol-ts" "^0.5.2"
     form-data "^3.0.0"

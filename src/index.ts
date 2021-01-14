@@ -7,8 +7,8 @@ import { InteractionTokenEntity } from './entities/interactionTokenEntity'
 import { EventLogEntity } from './entities/eventLogEntity'
 import { EncryptedWalletEntity } from './entities/encryptedWalletEntity'
 
-import { IStorage, EncryptedWalletAttributes, FindOptions } from '@jolocom/sdk/js/storage'
-import { Connection } from 'typeorm'
+import { IStorage, EncryptedWalletAttributes, FindOptions, InteractionTokenAttrs } from '@jolocom/sdk/js/storage'
+import { Connection, FindOptionsUtils } from 'typeorm'
 import { plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
@@ -62,7 +62,9 @@ export class JolocomTypeormStorage implements IStorage {
     credentialMetadata: this.getMetadataForCredential.bind(this),
     publicProfile: this.getPublicProfile.bind(this),
     identity: this.getCachedIdentity.bind(this),
-    interactionTokens: this.findTokens.bind(this)
+    interactionTokens: this.findTokens.bind(this),
+    //TODO interactions: this.findInteractions.bind(this),
+    interactionIds: this.findInteractionIds.bind(this)
   }
 
   public delete = {
@@ -184,6 +186,57 @@ export class JolocomTypeormStorage implements IStorage {
       JolocomLib.parse.interactionToken.fromJWT(entity.original),
     )
   }
+
+  private async findInteractionIds(attrs?: InteractionTokenAttrs | InteractionTokenAttrs[], findOptions?: FindOptions) {
+    let qb = this.connection
+      .getRepository(InteractionTokenEntity)
+      .createQueryBuilder("tokens")
+      .select('tokens.nonce')
+      .distinct()
+
+    qb = FindOptionsUtils.applyFindManyOptionsOrConditionsToQueryBuilder(qb, {
+      where: attrs,
+      ...findOptions
+    })
+
+    const tokens = await qb
+      .getRawMany()
+
+
+    return tokens.map(t => t.tokens_nonce)
+  }
+
+/* TODO
+  private async findInteractions(attrs?: InteractionTokenAttrs | InteractionTokenAttrs[], findOptions?: FindOptions) {
+    const qb = this.connection
+      .getRepository(InteractionTokenEntity)
+      .createQueryBuilder("tokens")
+      .where(queryBuilder => {
+        let interactionsQueryBuilder = queryBuilder.subQuery()
+          .from(InteractionTokenEntity, "interaction")
+          .select('interaction.nonce')
+          .distinct()
+
+        interactionsQueryBuilder = FindOptionsUtils.applyFindManyOptionsOrConditionsToQueryBuilder(qb, {
+          where: attrs,
+          ...findOptions
+        })
+
+        return "tokens.nonce IN " + interactionsQueryBuilder.getQuery()
+      })
+
+    console.error("QUERY IS: ", qb.getQuery())
+
+    // no need to construct entity classes, so use getRawMany
+    const entities = await qb
+      .getRawMany()
+
+    return entities.map(entity =>
+      // note: ".tokens_original" because the query builder was called "tokens"
+      JolocomLib.parse.interactionToken.fromJWT(entity.tokens_original),
+    )
+  }
+*/
 
   private async getMetadataForCredential({
     issuer,

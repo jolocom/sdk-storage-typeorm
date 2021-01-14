@@ -1,6 +1,7 @@
 "use strict";
 var SignatureEntity_1;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SignatureEntity = void 0;
 const tslib_1 = require("tslib");
 const typeorm_1 = require("typeorm");
 const verifiableCredentialEntity_1 = require("./verifiableCredentialEntity");

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.JolocomTypeormStorage = void 0;
 const tslib_1 = require("tslib");
 const settingEntity_1 = require("./entities/settingEntity");
 const credentialEntity_1 = require("./entities/credentialEntity");
@@ -9,6 +10,7 @@ const cacheEntity_1 = require("./entities/cacheEntity");
 const interactionTokenEntity_1 = require("./entities/interactionTokenEntity");
 const eventLogEntity_1 = require("./entities/eventLogEntity");
 const encryptedWalletEntity_1 = require("./entities/encryptedWalletEntity");
+const typeorm_1 = require("typeorm");
 const class_transformer_1 = require("class-transformer");
 const utils_1 = require("./utils");
 const jolocom_lib_1 = require("jolocom-lib");
@@ -41,7 +43,9 @@ class JolocomTypeormStorage {
             credentialMetadata: this.getMetadataForCredential.bind(this),
             publicProfile: this.getPublicProfile.bind(this),
             identity: this.getCachedIdentity.bind(this),
-            interactionTokens: this.findTokens.bind(this)
+            interactionTokens: this.findTokens.bind(this),
+            //TODO interactions: this.findInteractions.bind(this),
+            interactionIds: this.findInteractionIds.bind(this)
         };
         this.delete = {
             verifiableCredential: this.deleteVCred.bind(this),
@@ -142,6 +146,50 @@ class JolocomTypeormStorage {
             return entities.map(entity => jolocom_lib_1.JolocomLib.parse.interactionToken.fromJWT(entity.original));
         });
     }
+    findInteractionIds(attrs, findOptions) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            let qb = this.connection
+                .getRepository(interactionTokenEntity_1.InteractionTokenEntity)
+                .createQueryBuilder("tokens")
+                .select('tokens.nonce')
+                .distinct();
+            qb = typeorm_1.FindOptionsUtils.applyFindManyOptionsOrConditionsToQueryBuilder(qb, Object.assign({ where: attrs }, findOptions));
+            const tokens = yield qb
+                .getRawMany();
+            return tokens.map(t => t.tokens_nonce);
+        });
+    }
+    /* TODO
+      private async findInteractions(attrs?: InteractionTokenAttrs | InteractionTokenAttrs[], findOptions?: FindOptions) {
+        const qb = this.connection
+          .getRepository(InteractionTokenEntity)
+          .createQueryBuilder("tokens")
+          .where(queryBuilder => {
+            let interactionsQueryBuilder = queryBuilder.subQuery()
+              .from(InteractionTokenEntity, "interaction")
+              .select('interaction.nonce')
+              .distinct()
+    
+            interactionsQueryBuilder = FindOptionsUtils.applyFindManyOptionsOrConditionsToQueryBuilder(qb, {
+              where: attrs,
+              ...findOptions
+            })
+    
+            return "tokens.nonce IN " + interactionsQueryBuilder.getQuery()
+          })
+    
+        console.error("QUERY IS: ", qb.getQuery())
+    
+        // no need to construct entity classes, so use getRawMany
+        const entities = await qb
+          .getRawMany()
+    
+        return entities.map(entity =>
+          // note: ".tokens_original" because the query builder was called "tokens"
+          JolocomLib.parse.interactionToken.fromJWT(entity.tokens_original),
+        )
+      }
+    */
     getMetadataForCredential({ issuer, type: credentialType, }) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const entryKey = buildMetadataKey(issuer, credentialType);
