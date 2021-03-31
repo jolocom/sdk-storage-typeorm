@@ -903,10 +903,10 @@
   dependencies:
     cred-types-jolocom-core "^0.0.11"
 
-"@jolocom/protocol-ts@^0.5.2":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@jolocom/protocol-ts/-/protocol-ts-0.5.2.tgz#291a6865f2c3eeb47443bf8be3210848baeb5d25"
-  integrity sha512-vQq5EhapRaxyzM3UaEAycoej1jdaU6RWM1yNeh47SqHqEfRsxsVrI3MYAuUeCXaq5ULv4MCwrDt/Y6ARsR4EOA==
+"@jolocom/protocol-ts@^0.5.4":
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/@jolocom/protocol-ts/-/protocol-ts-0.5.4.tgz#a59052d97b45ad157e877b1ed8ed2cd8235ad45e"
+  integrity sha512-t6gzeLZPgKQUksjAVgMint/htYIEy6LwVfqhm7kZx4+bkAxa0LHIynqEXFPA7bbx1+mrd2hxsvWmSswXiBtlkw==
   dependencies:
     cred-types-jolocom-core "^0.0.11"
 
@@ -917,12 +917,12 @@
   dependencies:
     ethers "5.0.5"
 
-"@jolocom/sdk@^1.1.0-rc0":
-  version "1.1.0-rc0"
-  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.1.0-rc0.tgz#c6227e8af253703ba31d48b87e3c13e524826a65"
-  integrity sha512-cAEgmWnULPW3jyDDOe5lMCX5ZuERaWUeNjyXq+vjHcLBwlIIz6eR1GkBFdrVvxUwXNtpajSEvoC1adZk9GGyFw==
+"@jolocom/sdk@^1.1.0":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@jolocom/sdk/-/sdk-1.1.2.tgz#8565a06269fa330c89616422221c31bb4249183e"
+  integrity sha512-SDhvPPHFKd9L1nE9cJXUfQ1ouy6An0U7uvzMP8U63R/Yns1nHElmB+6MLf6BuuThP07CZS6VMWmCg/J/DKev1Q==
   dependencies:
-    "@jolocom/protocol-ts" "^0.5.2"
+    "@jolocom/protocol-ts" "^0.5.4"
     form-data "^3.0.0"
     ramda "^0.26.1"
 
@@ -3655,7 +3655,7 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
-mkdirp@1.x, mkdirp@^1.0.3:
+mkdirp@1.x:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
@@ -5109,10 +5109,10 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typeorm@^0.2.24:
-  version "0.2.25"
-  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.25.tgz#1a33513b375b78cc7740d2405202208b918d7dde"
-  integrity sha512-yzQ995fyDy5wolSLK9cmjUNcmQdixaeEm2TnXB5HN++uKbs9TiR6Y7eYAHpDlAE8s9J1uniDBgytecCZVFergQ==
+typeorm@0.2.24:
+  version "0.2.24"
+  resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.2.24.tgz#cd0fbd907326873a96c98e290fca49c589f0ffa8"
+  integrity sha512-L9tQv6nNLRyh+gex/qc8/CyLs8u0kXKqk1OjYGF13k/KOg6N2oibwkuGgv0FuoTGYx2ta2NmqvuMUAMrHIY5ew==
   dependencies:
     app-root-path "^3.0.0"
     buffer "^5.1.0"
@@ -5122,7 +5122,7 @@ typeorm@^0.2.24:
     dotenv "^6.2.0"
     glob "^7.1.2"
     js-yaml "^3.13.1"
-    mkdirp "^1.0.3"
+    mkdirp "^0.5.1"
     reflect-metadata "^0.1.13"
     sha.js "^2.4.11"
     tslib "^1.9.0"
@@ -5376,9 +5376,9 @@ xtend@^4.0.0:
   integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
 
 y18n@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/y18n/-/y18n-4.0.0.tgz#95ef94f85ecc81d007c264e190a120f0a3c8566b"
-  integrity sha512-r9S/ZyXu/Xu9q1tYlpsLIsa3EeLXXk0VwlxqTcFRfg9EhMW+17kbt9G0NrgCmhGb5vT2hyhJZLfDGx+7+5Uj/w==
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-4.0.1.tgz#8db2b83c31c5d75099bb890b23f3094891e247d4"
+  integrity sha512-wNcy4NvjMYL8gogWWYAO7ZFWFfHcbdbE57tZO8e4cbpj8tfUcwrwqSl3ad8HxpYWCdXcJUCeKKZS62Av1affwQ==
 
 yallist@^3.0.0, yallist@^3.0.3:
   version "3.1.1"
