@@ -48,7 +48,10 @@ export class VerifiableCredentialEntity {
   expires!: Date
 
   @Expose()
-  @ManyToOne(type => EncryptedWalletEntity, wallet => wallet.id)
+  @ManyToOne(type => EncryptedWalletEntity, wallet => wallet.id, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
   subject!: EncryptedWalletEntity
 
   @OneToMany(type => SignatureEntity, sig => sig.verifiableCredential, {
