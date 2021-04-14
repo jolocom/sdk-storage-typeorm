@@ -68,6 +68,10 @@ export class JolocomTypeormStorage implements IStorage {
 
   public delete = {
     verifiableCredential: this.deleteVCred.bind(this),
+    identity: this.deleteIdentity.bind(this),
+    encryptedWallet: this.deleteEncryptedWallet.bind(this),
+    verifiableCredentials: this.deleteVCreds.bind(this),
+    interactions: this.deleteInteractions.bind(this),
     // credentialMetadata: this.deleteCredentialMetadata.bind(this)
   }
 
@@ -332,6 +336,18 @@ export class JolocomTypeormStorage implements IStorage {
     await this.connection.manager.save(verifiableCredential)
   }
 
+  private async deleteIdentity(did: string) {
+    await this.connection.manager.delete(IdentityCacheEntity, {
+      key: did
+    })
+  }
+
+  private async deleteEncryptedWallet(did: string) {
+    await this.connection.manager.delete(EncryptedWalletEntity, {
+      id: did
+    })
+  }
+
   private async deleteVCred(id: string): Promise<void> {
     await this.connection.manager
       .createQueryBuilder()
@@ -353,6 +369,15 @@ export class JolocomTypeormStorage implements IStorage {
       .delete()
       .from(VerifiableCredentialEntity)
       .where('id = :id', { id })
+      .execute()
+  }
+
+  private async deleteVCreds(query: CredentialQuery): Promise<void> {
+    await this.connection.manager
+      .createQueryBuilder()
+      .delete()
+      .from(VerifiableCredentialEntity)
+      .where(query)
       .execute()
   }
 
@@ -417,6 +442,19 @@ export class JolocomTypeormStorage implements IStorage {
     }
 
     return qb
+  }
+
+
+  private async deleteInteractions(query?: InteractionQuery): Promise<void> {
+    let interxns_qb = this._buildInteractionQueryBuilder(query)
+    let qb = this.connection
+      .getRepository(InteractionTokenEntity)
+      .createQueryBuilder()
+      .delete()
+      .where(`nonce IN (${ interxns_qb.getQuery() })`
+      )
+      .setParameters(interxns_qb.getParameters())
+    await qb.execute()
   }
 
   private async readEventLog(id: string): Promise<string> {
