@@ -1,7 +1,6 @@
 "use strict";
 var CredentialEntity_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CredentialEntity = void 0;
 const tslib_1 = require("tslib");
 const typeorm_1 = require("typeorm");
 const class_transformer_1 = require("class-transformer");
@@ -26,7 +25,9 @@ tslib_1.__decorate([
 ], CredentialEntity.prototype, "id", void 0);
 tslib_1.__decorate([
     class_transformer_1.Type(() => verifiableCredentialEntity_1.VerifiableCredentialEntity),
-    typeorm_1.ManyToOne(type => verifiableCredentialEntity_1.VerifiableCredentialEntity, vCred => vCred.claim),
+    typeorm_1.ManyToOne(type => verifiableCredentialEntity_1.VerifiableCredentialEntity, vCred => vCred.claim, {
+        onDelete: 'CASCADE'
+    }),
     tslib_1.__metadata("design:type", verifiableCredentialEntity_1.VerifiableCredentialEntity)
 ], CredentialEntity.prototype, "verifiableCredential", void 0);
 tslib_1.__decorate([

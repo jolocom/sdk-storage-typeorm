@@ -1,7 +1,6 @@
 "use strict";
 var InteractionTokenEntity_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.InteractionTokenEntity = void 0;
 const tslib_1 = require("tslib");
 const class_transformer_1 = require("class-transformer");
 const typeorm_1 = require("typeorm");

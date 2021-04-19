@@ -1,11 +1,12 @@
-import { IStorage, EncryptedWalletAttributes, FindOptions, InteractionTokenAttrs } from '@jolocom/sdk/js/storage';
-import { Connection } from 'typeorm';
+import { InteractionTokenEntity } from './entities/interactionTokenEntity';
+import { IStorage, EncryptedWalletAttributes, QueryOptions, CredentialQuery, InteractionTokenQuery, InteractionQuery, InteractionQueryAttrs } from '@jolocom/sdk/js/storage';
+import { Connection, SelectQueryBuilder } from 'typeorm';
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential';
 import { CredentialOfferMetadata, CredentialOfferRenderInfo } from 'jolocom-lib/js/interactionTokens/interactionTokens.types';
 import { InternalDb } from '@jolocom/local-resolver-registrar/js/db';
 import { JWTEncodable, JSONWebToken } from 'jolocom-lib/js/interactionTokens/JSONWebToken';
 import { Identity } from 'jolocom-lib/js/identity/identity';
-import { IdentitySummary } from '@jolocom/sdk/js/types';
+import { IdentitySummary } from '@jolocom/sdk';
 export interface PersonaAttributes {
     did: string;
     controllingKeyPath: string;
@@ -32,7 +33,7 @@ export declare class JolocomTypeormStorage implements IStorage {
             [key: string]: any;
         }>;
         setting: (key: string) => Promise<any>;
-        verifiableCredential: (query?: object | undefined, findOptions?: FindOptions | undefined) => Promise<SignedCredential[]>;
+        verifiableCredential: (query?: import("@jolocom/sdk/js/storage").CredentialQueryAttrs | import("@jolocom/sdk/js/storage").CredentialQueryAttrs[] | undefined, queryOpts?: QueryOptions | undefined) => Promise<SignedCredential[]>;
         attributesByType: (type: string[]) => Promise<{
             type: string[];
             results: {
@@ -41,20 +42,20 @@ export declare class JolocomTypeormStorage implements IStorage {
                 fieldName: any;
             }[];
         }>;
-        vCredentialsByAttributeValue: (attribute: string, findOptions?: FindOptions | undefined) => Promise<SignedCredential[]>;
+        vCredentialsByAttributeValue: (attribute: string, queryOptions?: QueryOptions | undefined) => Promise<SignedCredential[]>;
         encryptedWallet: (id?: string | undefined) => Promise<EncryptedWalletAttributes | null>;
         credentialMetadata: ({ issuer, type: credentialType, }: SignedCredential) => Promise<any>;
         publicProfile: (did: string) => Promise<IdentitySummary>;
-        identity: (did: string) => Promise<undefined | Identity>;
-        interactionTokens: (attrs: {
-            nonce?: string;
-            type?: string;
-            issuer?: string;
-        }, findOptions?: FindOptions | undefined) => Promise<JSONWebToken<JWTEncodable>[]>;
-        interactionIds: (attrs?: InteractionTokenAttrs | InteractionTokenAttrs[] | undefined, findOptions?: FindOptions | undefined) => Promise<any[]>;
+        identity: (did: string) => Promise<Identity | undefined>;
+        interactionTokens: (query: InteractionTokenQuery, queryOptions?: QueryOptions | undefined) => Promise<JSONWebToken<JWTEncodable>[]>;
+        interactionIds: (query?: InteractionQueryAttrs | InteractionQueryAttrs[] | undefined, queryOptions?: QueryOptions | undefined) => Promise<any[]>;
     };
     delete: {
         verifiableCredential: (id: string) => Promise<void>;
+        identity: (did: string) => Promise<void>;
+        encryptedWallet: (did: string) => Promise<void>;
+        verifiableCredentials: (query: CredentialQuery) => Promise<void>;
+        interactions: (query?: InteractionQueryAttrs | InteractionQueryAttrs[] | undefined) => Promise<void>;
     };
     constructor(conn: Connection);
     private getSettingsObject;
@@ -75,7 +76,14 @@ export declare class JolocomTypeormStorage implements IStorage {
     private cacheIdentity;
     private storeInteractionToken;
     private storeVClaim;
+    private deleteIdentity;
+    private deleteEncryptedWallet;
     private deleteVCred;
+    private deleteVCreds;
+    _buildInteractionQueryBuilder(query?: InteractionQuery, options?: QueryOptions): SelectQueryBuilder<InteractionTokenEntity>;
+    private _applyQueryOptions;
+    _applyInteractionQuery(qb: SelectQueryBuilder<InteractionTokenEntity>, query?: InteractionQuery): SelectQueryBuilder<InteractionTokenEntity>;
+    private deleteInteractions;
     private readEventLog;
     private appendEvent;
     private deleteEventLog;

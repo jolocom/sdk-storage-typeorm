@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EncryptedWalletEntity = void 0;
 const tslib_1 = require("tslib");
 const typeorm_1 = require("typeorm");
 const utils_1 = require("../utils");
