@@ -10,7 +10,8 @@
     "build": "tsc -p .",
     "start": "tsc -p . -w",
     "test": "jest",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "repl": "node --experimental-repl-await -r ts-node/register ./bin/repl.ts"
   },
   "repository": "git@github.com:jolocom/sdk-storage-typeorm",
   "author": "Jolocom Dev <dev@jolocom.com>",
@@ -33,6 +34,7 @@
     "pg": "^8.4.2",
     "sqlite3": "4.2.0",
     "ts-jest": "^26.3.0",
+    "ts-node": "^9.1.1",
     "typeorm": "0.2.24",
     "typescript": "^3.8.3"
   },
