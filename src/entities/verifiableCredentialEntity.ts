@@ -32,7 +32,7 @@ export class VerifiableCredentialEntity {
   type!: string
 
   @Expose()
-  @Column({ length: 20, nullable: true })
+  @Column('text', { nullable: true })
   name!: string
 
   @Expose()
