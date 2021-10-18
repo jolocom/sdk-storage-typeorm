@@ -44,7 +44,8 @@ export declare class JolocomTypeormStorage implements IStorage {
         }>;
         vCredentialsByAttributeValue: (attribute: string, queryOptions?: QueryOptions | undefined) => Promise<SignedCredential[]>;
         encryptedWallet: (id?: string | undefined) => Promise<EncryptedWalletAttributes | null>;
-        credentialMetadata: ({ issuer, type: credentialType, }: SignedCredential) => Promise<any>;
+        credentialMetadataById: (id: string) => Promise<CredentialMetadataSummary>;
+        credentialMetadata: ({ issuer, type: credentialType, }: SignedCredential) => Promise<CredentialMetadataSummary>;
         publicProfile: (did: string) => Promise<IdentitySummary>;
         identity: (did: string) => Promise<Identity | undefined>;
         interactionTokens: (query: InteractionTokenQuery, queryOptions?: QueryOptions | undefined) => Promise<JSONWebToken<JWTEncodable>[]>;
@@ -67,6 +68,7 @@ export declare class JolocomTypeormStorage implements IStorage {
     private getEncryptedWallet;
     private findTokens;
     private findInteractionIds;
+    private getCredentialMetadata;
     private getMetadataForCredential;
     private getPublicProfile;
     private getCachedIdentity;

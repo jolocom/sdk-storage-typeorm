@@ -38,6 +38,7 @@ class JolocomTypeormStorage {
             attributesByType: this.getAttributesByType.bind(this),
             vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
             encryptedWallet: this.getEncryptedWallet.bind(this),
+            credentialMetadataById: this.getCredentialMetadata.bind(this),
             credentialMetadata: this.getMetadataForCredential.bind(this),
             publicProfile: this.getPublicProfile.bind(this),
             identity: this.getCachedIdentity.bind(this),
@@ -198,11 +199,16 @@ class JolocomTypeormStorage {
             return tokens.map(t => t.req_token_nonce);
         });
     }
+    getCredentialMetadata(id) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const [entry] = yield this.connection.manager.findByIds(cacheEntity_1.CacheEntity, [id]);
+            return (entry && entry.value) || {};
+        });
+    }
     getMetadataForCredential({ issuer, type: credentialType, }) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             const entryKey = buildMetadataKey(issuer, credentialType);
-            const [entry] = yield this.connection.manager.findByIds(cacheEntity_1.CacheEntity, [entryKey]);
-            return (entry && entry.value) || {};
+            return this.getCredentialMetadata(entryKey);
         });
     }
     getPublicProfile(did) {

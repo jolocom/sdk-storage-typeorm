@@ -58,6 +58,7 @@ export class JolocomTypeormStorage implements IStorage {
     attributesByType: this.getAttributesByType.bind(this),
     vCredentialsByAttributeValue: this.getVCredentialsForAttribute.bind(this),
     encryptedWallet: this.getEncryptedWallet.bind(this),
+    credentialMetadataById: this.getCredentialMetadata.bind(this),
     credentialMetadata: this.getMetadataForCredential.bind(this),
     publicProfile: this.getPublicProfile.bind(this),
     identity: this.getCachedIdentity.bind(this),
@@ -251,13 +252,17 @@ export class JolocomTypeormStorage implements IStorage {
     return tokens.map(t => t.req_token_nonce)
   }
 
+  private async getCredentialMetadata(id: string): Promise<CredentialMetadataSummary> {
+    const [entry] = await this.connection.manager.findByIds(CacheEntity, [id])
+    return (entry && entry.value) || {}
+  }
+
   private async getMetadataForCredential({
     issuer,
     type: credentialType,
   }: SignedCredential) {
     const entryKey = buildMetadataKey(issuer, credentialType)
-    const [entry] = await this.connection.manager.findByIds(CacheEntity, [entryKey])
-    return (entry && entry.value) || {}
+    return this.getCredentialMetadata(entryKey)
   }
 
   private async getPublicProfile(did: string): Promise<IdentitySummary> {
