@@ -23,7 +23,9 @@ export class CredentialEntity {
   id!: number
 
   @Type(() => VerifiableCredentialEntity)
-  @ManyToOne(type => VerifiableCredentialEntity, vCred => vCred.claim)
+  @ManyToOne(type => VerifiableCredentialEntity, vCred => vCred.claim, {
+    onDelete: 'CASCADE'
+  })
   verifiableCredential!: VerifiableCredentialEntity
 
   @Column({ length: 50 })

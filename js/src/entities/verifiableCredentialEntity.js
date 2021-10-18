@@ -62,7 +62,10 @@ tslib_1.__decorate([
 ], VerifiableCredentialEntity.prototype, "expires", void 0);
 tslib_1.__decorate([
     class_transformer_1.Expose(),
-    typeorm_1.ManyToOne(type => encryptedWalletEntity_1.EncryptedWalletEntity, wallet => wallet.id),
+    typeorm_1.ManyToOne(type => encryptedWalletEntity_1.EncryptedWalletEntity, wallet => wallet.id, {
+        cascade: true,
+        onDelete: 'CASCADE'
+    }),
     tslib_1.__metadata("design:type", encryptedWalletEntity_1.EncryptedWalletEntity)
 ], VerifiableCredentialEntity.prototype, "subject", void 0);
 tslib_1.__decorate([

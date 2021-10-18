@@ -19,7 +19,9 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Number)
 ], SignatureEntity.prototype, "id", void 0);
 tslib_1.__decorate([
-    typeorm_1.ManyToOne(type => verifiableCredentialEntity_1.VerifiableCredentialEntity, vCred => vCred.proof),
+    typeorm_1.ManyToOne(type => verifiableCredentialEntity_1.VerifiableCredentialEntity, vCred => vCred.proof, {
+        onDelete: 'CASCADE'
+    }),
     tslib_1.__metadata("design:type", verifiableCredentialEntity_1.VerifiableCredentialEntity)
 ], SignatureEntity.prototype, "verifiableCredential", void 0);
 tslib_1.__decorate([

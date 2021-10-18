@@ -7,8 +7,8 @@ import { InteractionTokenEntity } from './entities/interactionTokenEntity'
 import { EventLogEntity } from './entities/eventLogEntity'
 import { EncryptedWalletEntity } from './entities/encryptedWalletEntity'
 
-import { IStorage, EncryptedWalletAttributes } from '@jolocom/sdk/js/storage'
-import { Connection } from 'typeorm'
+import { IStorage, EncryptedWalletAttributes, QueryOptions, CredentialQuery, InteractionTokenQuery, InteractionQuery, InteractionQueryAttrs } from '@jolocom/sdk/js/storage'
+import { Connection, SelectQueryBuilder } from 'typeorm'
 import { plainToClass } from 'class-transformer'
 import { SignedCredential } from 'jolocom-lib/js/credentials/signedCredential/signedCredential'
 import {
@@ -22,10 +22,9 @@ import {
   JWTEncodable,
   JSONWebToken,
 } from 'jolocom-lib/js/interactionTokens/JSONWebToken'
-import { JolocomLib } from 'jolocom-lib'
 import { Identity } from 'jolocom-lib/js/identity/identity'
 import { IdentityCacheEntity } from './entities/identityCacheEntity'
-import { IdentitySummary } from '@jolocom/sdk/js/types'
+import { IdentitySummary, Interaction, JolocomLib } from '@jolocom/sdk'
 
 export interface PersonaAttributes {
   did: string
@@ -62,11 +61,17 @@ export class JolocomTypeormStorage implements IStorage {
     credentialMetadata: this.getMetadataForCredential.bind(this),
     publicProfile: this.getPublicProfile.bind(this),
     identity: this.getCachedIdentity.bind(this),
-    interactionTokens: this.findTokens.bind(this)
+    interactionTokens: this.findTokens.bind(this),
+    //TODO interactions: this.findInteractions.bind(this),
+    interactionIds: this.findInteractionIds.bind(this)
   }
 
   public delete = {
     verifiableCredential: this.deleteVCred.bind(this),
+    identity: this.deleteIdentity.bind(this),
+    encryptedWallet: this.deleteEncryptedWallet.bind(this),
+    verifiableCredentials: this.deleteVCreds.bind(this),
+    interactions: this.deleteInteractions.bind(this),
     // credentialMetadata: this.deleteCredentialMetadata.bind(this)
   }
 
@@ -96,12 +101,54 @@ export class JolocomTypeormStorage implements IStorage {
     await repo.save(setting)
   }
 
-  private async getVCredential(query?: object): Promise<SignedCredential[]> {
+  private async getVCredential(
+    query?: CredentialQuery, queryOpts?: QueryOptions
+  ): Promise<SignedCredential[]> {
+    let query_arr = !query ? null : Array.isArray(query) ? query : [query]
+
+    // TODO the query has a claims object whose properties need to be mapped to
+    // where clauses on a leftJoin on credentials WHERE propertyName = '' and
+    // propertyValue = ''
+    // then distinct()
+    //
+    // can use/reuse getVCredentialsForAttribute? it only supports querying by 1
+    // attribute....
+
+    let full_query = query_arr?.map(credQuery => {
+      /*
+       *let claim = credQuery.claim && Object.keys(credQuery.claim).map(propertyName => {
+       *  // NOTE: "|| undefined" so that a falsy value simply doesn't match
+       *  // against values. This means we can't search for empty values though ''
+       *  let propertyValue = credQuery.claim![propertyName] || undefined
+       *  return {
+       *    propertyName,
+       *    ...(propertyValue && { propertyValue })
+       *  }
+       *})
+       */
+
+      /**
+       * the In(credTypes) doesn't work inside a where
+       *
+       *let credTypes = credQuery.types?.map(t => t.toString())
+       *if (!credTypes && credQuery.type) credTypes = [credQuery.type.toString()]
+       */
+
+      let credType = credQuery.type?.toString()
+
+      return {
+        ...credQuery,
+        ...(credType && { type: credType }),
+        //...(claim && { claim: In(['lol', 'ok']) }),
+      }
+    })
+
     const entities = await this.connection.manager.find(
       VerifiableCredentialEntity,
       {
-        where: query,
+        where: full_query,
         relations: ['claim', 'proof', 'subject'],
+        ...queryOpts
       },
     )
 
@@ -132,16 +179,23 @@ export class JolocomTypeormStorage implements IStorage {
 
   private async getVCredentialsForAttribute(
     attribute: string,
+    queryOptions?: QueryOptions
   ): Promise<SignedCredential[]> {
-    const entities = await this.connection
+    let query = await this.connection
       .getRepository(VerifiableCredentialEntity)
       .createQueryBuilder('verifiableCredential')
       .leftJoinAndSelect('verifiableCredential.claim', 'claim')
       .leftJoinAndSelect('verifiableCredential.proof', 'proof')
       .leftJoinAndSelect('verifiableCredential.subject', 'subject')
       .where('claim.propertyValue = :attribute', { attribute })
-      .getMany()
 
+    if (queryOptions) {
+      query = query
+        .skip(queryOptions.skip)
+        .take(queryOptions.take)
+    }
+
+    const entities = await query.getMany()
     return entities.map(e => e.toVerifiableCredential())
   }
 
@@ -159,19 +213,42 @@ export class JolocomTypeormStorage implements IStorage {
     return null
   }
 
-  private async findTokens(attrs: {
-    nonce?: string
-    type?: string
-    issuer?: string
-  }): Promise<JSONWebToken<JWTEncodable>[]> {
+  private async findTokens(
+    query: InteractionTokenQuery,
+    queryOptions?: QueryOptions
+  ): Promise<JSONWebToken<JWTEncodable>[]> {
     // return await connection.manager.find(InteractionTokenEntity)
     const entities = await this.connection.manager
       .find(InteractionTokenEntity, {
-        where: [attrs],
+        where: query,
+        ...queryOptions
       })
     return entities.map(entity =>
       JolocomLib.parse.interactionToken.fromJWT(entity.original),
     )
+  }
+
+  private async findInteractionIds(query?: InteractionQuery, queryOptions?: QueryOptions) {
+/*
+ *    let qb = this.connection
+ *      .getRepository(InteractionTokenEntity)
+ *      .createQueryBuilder("tokens")
+ *      .select('tokens.nonce')
+ *      .distinct()
+ *
+ *    qb = FindOptionsUtils.applyFindManyOptionsOrConditionsToQueryBuilder(qb, {
+ *      where: query,
+ *      ...queryOptions
+ *    })
+ */
+
+    let qb = this._buildInteractionQueryBuilder(query, queryOptions)
+
+    const tokens = await qb
+      .getRawMany()
+
+
+    return tokens.map(t => t.req_token_nonce)
   }
 
   private async getMetadataForCredential({
@@ -259,6 +336,18 @@ export class JolocomTypeormStorage implements IStorage {
     await this.connection.manager.save(verifiableCredential)
   }
 
+  private async deleteIdentity(did: string) {
+    await this.connection.manager.delete(IdentityCacheEntity, {
+      key: did
+    })
+  }
+
+  private async deleteEncryptedWallet(did: string) {
+    await this.connection.manager.delete(EncryptedWalletEntity, {
+      id: did
+    })
+  }
+
   private async deleteVCred(id: string): Promise<void> {
     await this.connection.manager
       .createQueryBuilder()
@@ -281,6 +370,91 @@ export class JolocomTypeormStorage implements IStorage {
       .from(VerifiableCredentialEntity)
       .where('id = :id', { id })
       .execute()
+  }
+
+  private async deleteVCreds(query: CredentialQuery): Promise<void> {
+    await this.connection.manager
+      .createQueryBuilder()
+      .delete()
+      .from(VerifiableCredentialEntity)
+      .where(query)
+      .execute()
+  }
+
+  public _buildInteractionQueryBuilder(query?: InteractionQuery, options?: QueryOptions) {
+    let qb = this.connection
+      .getRepository(InteractionTokenEntity)
+      .createQueryBuilder("req_token")
+      .select("req_token.nonce")
+      .distinct()
+    qb = options ? this._applyQueryOptions(qb, options, "req_token") : qb
+    qb = qb.leftJoin(
+        (qb) => qb.from(InteractionTokenEntity, "res_token"),
+        "res_token",
+        "req_token.nonce == res_token.nonce AND res_token.id != req_token.id"
+      )
+    qb = this._applyInteractionQuery(qb, query)
+    return qb
+  }
+
+
+  private _applyQueryOptions<T>(qb: SelectQueryBuilder<T>, options: QueryOptions, table?: string) {
+    // we could have used this, but apparently skip/take don't work on joins
+    //return FindOptionsUtils.applyFindManyOptionsOrConditionsToQueryBuilder<T>(qb, options)
+
+    let orderBy = options.order
+    if (orderBy) {
+      if (table) {
+        orderBy = {}
+        Object.keys(options.order!).forEach(k => {
+          orderBy![`${table}.${k}`] = options.order![k]
+        })
+      }
+      qb = qb.orderBy(orderBy)
+    }
+    if (options.skip) qb = qb.offset(options.skip)
+    if (options.take) qb = qb.limit(options.take)
+
+    return qb
+  }
+
+  public _applyInteractionQuery(qb: SelectQueryBuilder<InteractionTokenEntity>, query?: InteractionQuery) {
+    let query_arr = !query ? null : Array.isArray(query) ? query : [query]
+    if (query_arr) {
+      // we do this manually since it doesn't work well on joins
+      query_arr.forEach((q, i) => {
+        let where: string[] = []
+        let params: InteractionQueryAttrs = {}
+        // we need to add a loop counter to the keys because otherwise the
+        // parameters overwrite each other when we get/setParameters in
+        // deleteInteractions
+        Object.keys(q).forEach(k => params[`${k}${i}`] = q[k])
+        if (q.initiator) where.push(`req_token.issuer == :initiator${i}`)
+        if (q.responder) where.push(`res_token.issuer == :responder${i}`)
+        if (q.id) where.push(`req_token.nonce == :id${i}`)
+        if (q.type || q.types) {
+          let types = q.types || [q.type!]
+          where.push(`req_token.type IN (:...types${i})`)
+          params[`types${i}`] = types.map(Interaction.getRequestTokenType)
+        }
+        qb = qb.orWhere(where.join(" AND "), params)
+      })
+    }
+
+    return qb
+  }
+
+
+  private async deleteInteractions(query?: InteractionQuery): Promise<void> {
+    let interxns_qb = this._buildInteractionQueryBuilder(query)
+    let qb = this.connection
+      .getRepository(InteractionTokenEntity)
+      .createQueryBuilder()
+      .delete()
+      .where(`nonce IN (${ interxns_qb.getQuery() })`
+      )
+      .setParameters(interxns_qb.getParameters())
+    await qb.execute()
   }
 
   private async readEventLog(id: string): Promise<string> {

@@ -18,7 +18,9 @@ export class SignatureEntity {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @ManyToOne(type => VerifiableCredentialEntity, vCred => vCred.proof)
+  @ManyToOne(type => VerifiableCredentialEntity, vCred => vCred.proof, {
+    onDelete: 'CASCADE'
+  })
   verifiableCredential!: VerifiableCredentialEntity
 
   @Column()
